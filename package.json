@@ -1,0 +1,74 @@
+{
+	"name": "@pnxdxt/pkg-template",
+	"version": "0.0.1",
+	"description": "Template repository to quickly create npm packages",
+	"main": "dist/index.js",
+	"module": "./dist/index.mjs",
+	"typings": "dist/index.d.ts",
+	"scripts": {
+		"clean": "rimraf dist/",
+		"build": "npm run clean && npm run build:src",
+		"build:src": "tsup src/index.ts",
+		"lint": "xo",
+		"lint:fix": "xo --fix",
+		"test": "xo"
+	},
+	"engines": {
+		"node": ">=14.16"
+	},
+	"exports": {
+		".": {
+			"import": "./dist/index.mjs",
+			"require": "./dist/index.js",
+			"types": "./dist/index.d.ts"
+		}
+	},
+	"files": [
+		"dist",
+		"LICENSE",
+		"README.md"
+	],
+	"author": {
+		"name": "pnxdxt",
+		"email": "pnxdxt@gmail.com",
+		"url": "https://pnxdxt.com"
+	},
+	"license": "MIT",
+	"repository": "https://github.com/pnxdxt/pkg-template",
+	"homepage": "https://github.com/pnxdxt/pkg-template#readme",
+	"bugs": {
+		"url": "https://github.com/pnxdxt/pkg-template/issues"
+	},
+	"devDependencies": {
+		"@tsconfig/node14": "^1.0.3",
+		"rimraf": "^3.0.2",
+		"tsup": "^6.1.3",
+		"typescript": "^4.4.3",
+		"xo": "^0.44.0"
+	},
+	"xo": {
+		"prettier": true
+	},
+	"prettier": {
+		"trailingComma": "es5",
+		"singleQuote": true,
+		"bracketSpacing": false
+	},
+	"tsup": {
+		"splitting": false,
+		"sourcemap": true,
+		"clean": true,
+		"dts": true,
+		"target": "es2020",
+		"format": [
+			"esm",
+			"cjs"
+		]
+	},
+	"keywords": [
+		"helper",
+		"small",
+		"template",
+		"javascript"
+	]
+}
