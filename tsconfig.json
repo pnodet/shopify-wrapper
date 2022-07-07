@@ -3,6 +3,7 @@
   "include": ["src"],
   "exclude": ["node_modules", "dist"],
   "compilerOptions": {
+    "lib": ["DOM", "es2020"],
     "declarationMap": true,
     "declaration": true
   }

@@ -1,7 +1,7 @@
 {
-	"name": "@pnxdxt/pkg-template",
-	"version": "0.0.1",
-	"description": "Template repository to quickly create npm packages",
+	"name": "@pnxdxt/shopify-wrapper",
+	"version": "0.0.0",
+	"description": "Query and mutate shopfiy data easily and safely",
 	"main": "dist/index.js",
 	"module": "./dist/index.mjs",
 	"typings": "dist/index.d.ts",
@@ -34,10 +34,10 @@
 		"url": "https://pnxdxt.com"
 	},
 	"license": "MIT",
-	"repository": "https://github.com/pnxdxt/pkg-template",
-	"homepage": "https://github.com/pnxdxt/pkg-template#readme",
+	"repository": "https://github.com/pnxdxt/shopify-wrapper",
+	"homepage": "https://github.com/pnxdxt/shopify-wrapper#readme",
 	"bugs": {
-		"url": "https://github.com/pnxdxt/pkg-template/issues"
+		"url": "https://github.com/pnxdxt/shopify-wrapper/issues"
 	},
 	"devDependencies": {
 		"@tsconfig/node14": "^1.0.3",
@@ -70,5 +70,9 @@
 		"small",
 		"template",
 		"javascript"
-	]
+	],
+	"dependencies": {
+		"graphql": "^16.5.0",
+		"graphql-tag": "^2.12.6"
+	}
 }
