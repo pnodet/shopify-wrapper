@@ -1,6 +1,6 @@
 {
 	"name": "@pnxdxt/shopify-wrapper",
-	"version": "0.0.0",
+	"version": "0.0.1",
 	"description": "Query and mutate shopfiy data easily and safely",
 	"main": "dist/index.js",
 	"module": "./dist/index.mjs",
