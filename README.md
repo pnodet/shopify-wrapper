@@ -8,7 +8,7 @@
 
 ## Install
 ```
-$ npm install shopify-wrapper
+$ npm install @pnxdxt/shopify-wrapper
 ```
 ## Import
 
@@ -18,10 +18,10 @@ Use `import foo from 'foo'` instead of `const foo = require('foo')` to import th
 
 ```js
 // Load entire build
-import * as pkgName from 'shopify-wrapper';
+import * as pkgName from '@pnxdxt/shopify-wrapper';
 
 // Load by method
-import {main} from 'shopify-wrapper';
+import {main} from '@pnxdxt/shopify-wrapper';
 ```
 If the package is used in an async context, you could use [`await import(…)`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import#dynamic_imports) from CommonJS instead of `require(…)`.
 

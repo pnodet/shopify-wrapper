@@ -11,7 +11,7 @@
 		"build:src": "tsup src/index.ts",
 		"lint": "xo",
 		"lint:fix": "xo --fix",
-		"test": "xo"
+		"test": "node -v"
 	},
 	"engines": {
 		"node": ">=14.16"
