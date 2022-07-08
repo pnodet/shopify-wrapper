@@ -3,14 +3,14 @@ import {
 	MetafieldByProductHandleQueryVariables,
 	MetafieldByProductIdQuery,
 	MetafieldByProductIdQueryVariables,
-} from '../common/schema.js';
-import {normalizeMetafield} from '../common/normalize/metafield';
+} from '@/common/schema.js';
+import {normalizeMetafield} from '@/common/normalize/metafield';
 import {
 	METAFIELD_BY_PRODUCT_HANDLE_QUERY,
 	METAFIELD_BY_PRODUCT_ID_QUERY,
-} from '../common/queries/metafield';
-import type {Storefront} from '../types/index';
-import {shopifyFetch, ShopifyFetchConfig} from './fetch';
+} from '@/common/queries/metafield';
+import type {Storefront, ShopifyFetchConfig} from '@/types/index';
+import {shopifyFetch} from './fetch';
 
 export const getMetafieldByProductHandle = async (
 	handle: string,

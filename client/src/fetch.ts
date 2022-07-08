@@ -1,9 +1,5 @@
 import {print, DocumentNode} from 'graphql';
-
-export type ShopifyFetchConfig = {
-	domain: string;
-	token: string;
-};
+import type {ShopifyFetchConfig} from '../types';
 
 export const shopifyFetch = async <ReturnValue, Variables>(
 	query: DocumentNode,

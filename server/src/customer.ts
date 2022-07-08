@@ -1,8 +1,8 @@
-import {CustomerQuery, CustomerQueryVariables} from '../common/schema';
-import type {Storefront} from '../types/index';
-import {normalizeCustomer} from '../common/normalize/customer';
-import {CUSTOMER_QUERY} from '../common/queries/customer';
-import {shopifyFetch, ShopifyFetchConfig} from './fetch';
+import {CustomerQuery, CustomerQueryVariables} from '@/common/schema';
+import type {Storefront, ShopifyFetchConfig} from '@/types/index';
+import {normalizeCustomer} from '@/common/normalize/customer';
+import {CUSTOMER_QUERY} from '@/common/queries/customer';
+import {shopifyFetch} from './fetch';
 
 export const getCustomer = async (
 	accessToken: string,

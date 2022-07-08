@@ -1,16 +1,16 @@
+import {shopifyFetch} from './fetch';
 import {
 	PRODUCT_BY_HANDLE_QUERY,
 	PRODUCT_BY_ID_QUERY,
-} from '../common/queries/product';
+} from '@/common/queries/product';
 import {
 	ProductByHandleQuery,
 	ProductByHandleQueryVariables,
 	ProductByIdQuery,
 	ProductByIdQueryVariables,
-} from '../common/schema';
-import type {Storefront} from '../types/index';
-import {normalizeProduct} from '../common/normalize/product';
-import {shopifyFetch, ShopifyFetchConfig} from './fetch';
+} from '@/common/schema';
+import type {Storefront, ShopifyFetchConfig} from '@/types/index';
+import {normalizeProduct} from '@/common/normalize/product';
 
 export const getProductByHandle = async (
 	handle: string,

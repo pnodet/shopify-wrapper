@@ -1,12 +1,11 @@
 .DS_Store
-*-lock.*
-*.lock
 
 .idea/*
 node_modules
 
 build
 /dist
+.turbo
 
 # Logs
 logs

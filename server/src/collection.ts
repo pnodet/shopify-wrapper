@@ -3,14 +3,14 @@ import {
 	CollectionByHandleQueryVariables,
 	CollectionByIdQuery,
 	CollectionByIdQueryVariables,
-} from '../common/schema';
+} from '@/common/schema';
 import {
 	COLLECTION_BY_HANDLE_QUERY,
 	COLLECTION_BY_ID_QUERY,
-} from '../common/queries/collection';
-import {normalizeCollection} from '../common/normalize/collection';
-import type {Storefront} from '../types';
-import {shopifyFetch, ShopifyFetchConfig} from './fetch';
+} from '@/common/queries/collection';
+import {normalizeCollection} from '@/common/normalize/collection';
+import type {Storefront, ShopifyFetchConfig} from '@/types/index';
+import {shopifyFetch} from './fetch';
 
 export const getCollectionById = async (
 	id: string,

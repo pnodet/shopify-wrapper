@@ -3,8 +3,13 @@
   "include": ["src"],
   "exclude": ["node_modules", "dist"],
   "compilerOptions": {
-    "lib": ["DOM", "es2020"],
+    "lib": ["es2020"],
     "declarationMap": true,
-    "declaration": true
+    "declaration": true,
+    "baseUrl": ".",
+		"paths": {
+			"@/common/*": ["../src/common/*"],
+			"@/types/*": ["../src/types/*"],
+		}
   }
 }
