@@ -12,7 +12,7 @@ import {
 import type {Storefront, ShopifyFetchConfig} from '@/types/index';
 import {shopifyFetch} from './fetch';
 
-export const getMetafieldByProductHandle = async (
+const getMetafieldByProductHandle = async (
 	handle: string,
 	fetchConfig: ShopifyFetchConfig,
 	namespace: string,
@@ -35,7 +35,7 @@ export const getMetafieldByProductHandle = async (
 	return normalizeMetafield(response.product.metafield);
 };
 
-export const getMetafieldByProductId = async (
+const getMetafieldByProductId = async (
 	id: string,
 	fetchConfig: ShopifyFetchConfig,
 	namespace: string,
@@ -56,4 +56,9 @@ export const getMetafieldByProductId = async (
 
 	if (!response?.product?.metafield) return;
 	return normalizeMetafield(response.product.metafield);
+};
+
+export const getMetafield = {
+	byProductHandle: getMetafieldByProductHandle,
+	byProductId: getMetafieldByProductId,
 };

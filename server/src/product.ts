@@ -12,7 +12,7 @@ import type {Storefront, ShopifyFetchConfig} from '@/types/index';
 import {shopifyFetch} from './fetch';
 import {productWithPlaiceholder} from './lib/product-plaiceholder';
 
-export const getProductByHandle = async (
+const getProductByHandle = async (
 	handle: string,
 	fetchConfig: ShopifyFetchConfig
 ): Promise<Storefront.Product | undefined> => {
@@ -31,7 +31,7 @@ export const getProductByHandle = async (
 	return productWithPlaiceholder(res.product);
 };
 
-export const getProductById = async (
+const getProductById = async (
 	id: string,
 	fetchConfig: ShopifyFetchConfig
 ): Promise<Storefront.Product | undefined> => {
@@ -45,4 +45,9 @@ export const getProductById = async (
 
 	if (!res?.product) return;
 	return productWithPlaiceholder(res.product);
+};
+
+export const getProduct = {
+	byHandle: getProductByHandle,
+	byId: getProductById,
 };

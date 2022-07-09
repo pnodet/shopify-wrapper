@@ -12,7 +12,7 @@ import {
 import type {Storefront, ShopifyFetchConfig} from '@/types/index';
 import {normalizeProduct} from '@/common/normalize/product';
 
-export const getProductByHandle = async (
+const getProductByHandle = async (
 	handle: string,
 	fetchConfig: ShopifyFetchConfig
 ): Promise<Storefront.Product | undefined> => {
@@ -31,7 +31,7 @@ export const getProductByHandle = async (
 	return normalizeProduct(res.product);
 };
 
-export const getProductById = async (
+const getProductById = async (
 	id: string,
 	fetchConfig: ShopifyFetchConfig
 ): Promise<Storefront.Product | undefined> => {
@@ -45,4 +45,9 @@ export const getProductById = async (
 
 	if (!res?.product) return;
 	return normalizeProduct(res.product);
+};
+
+export const getProduct = {
+	byHandle: getProductByHandle,
+	byId: getProductById,
 };

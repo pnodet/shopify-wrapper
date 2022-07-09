@@ -12,7 +12,7 @@ import {normalizeCollection} from '@/common/normalize/collection';
 import type {Storefront, ShopifyFetchConfig} from '@/types/index';
 import {shopifyFetch} from './fetch';
 
-export const getCollectionById = async (
+const getCollectionById = async (
 	id: string,
 	fetchConfig: ShopifyFetchConfig,
 	maxProductsPerCollection = 10
@@ -33,7 +33,7 @@ export const getCollectionById = async (
 	return normalizeCollection(res.collection);
 };
 
-export const getCollectionByHandle = async (
+const getCollectionByHandle = async (
 	handle: string,
 	fetchConfig: ShopifyFetchConfig,
 	maxProductsPerCollection = 10
@@ -52,4 +52,9 @@ export const getCollectionByHandle = async (
 
 	if (!res?.collection) return;
 	return normalizeCollection(res.collection);
+};
+
+export const getCollection = {
+	byHandle: getCollectionByHandle,
+	byId: getCollectionById,
 };
