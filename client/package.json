@@ -1,6 +1,6 @@
 {
 	"name": "@shopify-wrapper/client",
-	"version": "0.0.2",
+	"version": "0.1.0",
 	"description": "Query and mutate shopfiy data easily and safely",
 	"main": "dist/index.js",
 	"module": "dist/index.mjs",
