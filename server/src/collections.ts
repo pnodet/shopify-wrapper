@@ -1,5 +1,6 @@
 import type {Merge, RequireExactlyOne} from 'type-fest';
 import {shopifyFetch} from './fetch';
+import {normalizeCollection} from './lib/collection';
 import {
 	CollectionByHandleQuery,
 	CollectionByHandleQueryVariables,
@@ -13,11 +14,10 @@ import {
 	COLLECTION_BY_HANDLE_QUERY,
 	COLLECTION_BY_ID_QUERY,
 } from '@/common/queries/collection';
-import {normalizeCollection} from '@/common/normalize/collection';
 
 import type {Storefront, ShopifyFetchConfig} from '@/types/index';
 
-const cleanCollections = (
+const cleanCollections = async (
 	responses: Array<CollectionByIdQuery | CollectionByHandleQuery | undefined>,
 ) => {
 	const dirtyCollections = responses
@@ -29,10 +29,10 @@ const cleanCollections = (
 				Boolean(collection),
 		);
 
-	const collections = dirtyCollections.map(collection =>
+	const promises = dirtyCollections.map(async collection =>
 		normalizeCollection(collection),
 	);
-	return collections;
+	return Promise.all(promises);
 };
 
 const getCollectionsByIds = async (
@@ -94,9 +94,11 @@ const getCollections = async (
 
 	if (!response) return [];
 
-	return response.collections.edges.map(({node: collection}) =>
+	const promises = response.collections.edges.map(async ({node: collection}) =>
 		normalizeCollection(collection),
 	);
+
+	return Promise.all(promises);
 };
 
 type FindOptionalArgs = {
