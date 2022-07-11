@@ -11,7 +11,11 @@
 ```
 $ npm install @shopify-wrapper/server
 
-OR
+```
+
+or
+
+```
 
 $ yarn add @shopify-wrapper/server
 
@@ -20,25 +24,15 @@ $ yarn add @shopify-wrapper/server
 ## Usage
 
 ```js
-import {getProduct} from @shopify-wrapper/server
+import shopifyWrapper from @shopify-wrapper/server
 
 const config = {
 	domain: process.env.domain,
 	token: process.env.token
 }
 
-const product = await getProduct.byHandle('my-super-product', config)
+const product = await shopifyWrapper.product.find({handle:'my-super-product', config})
 ```
-
-## Functions
-
-`getProduct` : retrieve a product `byHandle` or `byId`
-
-`getCollection` : retrieve a collection `byHandle` or `byId`
-
-`getMetafield` : retrieve a metafield `byProductHandle` or `byProductId`
-
-`getCustomer` : retrieve a customer with its access token
 
 ## Import
 

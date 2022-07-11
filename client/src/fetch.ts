@@ -1,10 +1,10 @@
 import {print, DocumentNode} from 'graphql';
-import type {ShopifyFetchConfig} from '../types';
+import type {ShopifyFetchConfig} from '@/types/index';
 
 export const shopifyFetch = async <ReturnValue, Variables>(
 	query: DocumentNode,
 	variables: Variables,
-	fetchConfig: ShopifyFetchConfig
+	fetchConfig: ShopifyFetchConfig,
 ): Promise<ReturnValue | undefined> => {
 	type ReponseValue = {data?: ReturnValue};
 	const {domain, token} = fetchConfig;

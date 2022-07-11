@@ -1,3 +1,6 @@
+import {Merge, RequireExactlyOne} from 'type-fest';
+import {shopifyFetch} from './fetch';
+import {productWithPlaiceholder} from './lib/product-plaiceholder';
 import {
 	PRODUCT_BY_HANDLE_QUERY,
 	PRODUCT_BY_ID_QUERY,
@@ -9,14 +12,12 @@ import {
 	ProductByIdQueryVariables,
 } from '@/common/schema';
 import type {Storefront, ShopifyFetchConfig} from '@/types/index';
-import {shopifyFetch} from './fetch';
-import {productWithPlaiceholder} from './lib/product-plaiceholder';
 
 const getProductByHandle = async (
 	handle: string,
-	fetchConfig: ShopifyFetchConfig
+	fetchConfig: ShopifyFetchConfig,
 ): Promise<Storefront.Product | undefined> => {
-	const res = await shopifyFetch<
+	const response = await shopifyFetch<
 		ProductByHandleQuery,
 		ProductByHandleQueryVariables
 	>(
@@ -24,30 +25,49 @@ const getProductByHandle = async (
 		{
 			handle,
 		},
-		fetchConfig
+		fetchConfig,
 	);
 
-	if (!res?.product) return;
-	return productWithPlaiceholder(res.product);
+	if (!response?.product) return;
+	return productWithPlaiceholder(response.product);
 };
 
 const getProductById = async (
 	id: string,
-	fetchConfig: ShopifyFetchConfig
+	fetchConfig: ShopifyFetchConfig,
 ): Promise<Storefront.Product | undefined> => {
-	const res = await shopifyFetch<ProductByIdQuery, ProductByIdQueryVariables>(
+	const response = await shopifyFetch<
+		ProductByIdQuery,
+		ProductByIdQueryVariables
+	>(
 		PRODUCT_BY_ID_QUERY,
 		{
 			id,
 		},
-		fetchConfig
+		fetchConfig,
 	);
 
-	if (!res?.product) return;
-	return productWithPlaiceholder(res.product);
+	if (!response?.product) return;
+	return productWithPlaiceholder(response.product);
 };
 
-export const getProduct = {
-	byHandle: getProductByHandle,
-	byId: getProductById,
+type FindOptionalArgs = {
+	handle: string;
+	id: string;
+};
+type FindMandatoryArgs = {config: ShopifyFetchConfig};
+
+type FindCollectionArgs = Merge<
+	RequireExactlyOne<FindOptionalArgs>,
+	FindMandatoryArgs
+>;
+
+const find = async ({id, handle, config}: FindCollectionArgs) => {
+	if (handle) return getProductByHandle(handle, config);
+	if (id) return getProductById(id, config);
+	throw new Error('provide either id or handle');
+};
+
+export const product = {
+	find,
 };

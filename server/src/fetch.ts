@@ -5,7 +5,7 @@ import type {ShopifyFetchConfig} from '@/types/index';
 export const shopifyFetch = async <ReturnValue, Variables>(
 	query: DocumentNode,
 	variables: Variables,
-	{domain, token}: ShopifyFetchConfig
+	{domain, token}: ShopifyFetchConfig,
 ): Promise<ReturnValue | undefined> => {
 	type ReponseValue = {data?: ReturnValue};
 	const response = await fetch(`https://${domain}/api/2022-04/graphql.json`, {

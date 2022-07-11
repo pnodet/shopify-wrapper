@@ -26,3 +26,15 @@ export const METAFIELD_BY_PRODUCT_ID_QUERY = gql`
 	}
 	${FullMetafield}
 `;
+
+export const METAFIELD_BY_COLLECTION_ID_QUERY = gql`
+  query metafieldByCollectionID($id: ID!, $namespace: String!, $key: String!) {
+    collection(id: $id) {
+      title
+      metafield(namespace: $namespace, key: $key) {
+        ...FullMetafield
+      }
+    }
+  }
+  ${FullMetafield}
+`;

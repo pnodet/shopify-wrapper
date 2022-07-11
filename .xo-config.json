@@ -1,0 +1,6 @@
+{
+	"prettier": true,
+	"rules": {
+		"import/extensions": "off"
+	}
+}

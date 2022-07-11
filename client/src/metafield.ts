@@ -1,3 +1,4 @@
+import {Merge, RequireExactlyOne} from 'type-fest';
 import {shopifyFetch} from './fetch';
 import {
 	MetafieldByProductHandleQuery,
@@ -16,7 +17,7 @@ const getMetafieldByProductHandle = async (
 	handle: string,
 	fetchConfig: ShopifyFetchConfig,
 	namespace: string,
-	key: string
+	key: string,
 ): Promise<Storefront.Metafield | undefined> => {
 	const response = await shopifyFetch<
 		MetafieldByProductHandleQuery,
@@ -28,10 +29,13 @@ const getMetafieldByProductHandle = async (
 			namespace,
 			key,
 		},
-		fetchConfig
+		fetchConfig,
 	);
 
-	if (!response?.product?.metafield) return;
+	if (!response?.product?.metafield) {
+		return;
+	}
+
 	return normalizeMetafield(response.product.metafield);
 };
 
@@ -39,7 +43,7 @@ const getMetafieldByProductId = async (
 	id: string,
 	fetchConfig: ShopifyFetchConfig,
 	namespace: string,
-	key: string
+	key: string,
 ): Promise<Storefront.Metafield | undefined> => {
 	const response = await shopifyFetch<
 		MetafieldByProductIdQuery,
@@ -51,14 +55,50 @@ const getMetafieldByProductId = async (
 			namespace,
 			key,
 		},
-		fetchConfig
+		fetchConfig,
 	);
 
-	if (!response?.product?.metafield) return;
+	if (!response?.product?.metafield) {
+		return;
+	}
+
 	return normalizeMetafield(response.product.metafield);
 };
 
-export const getMetafield = {
-	byProductHandle: getMetafieldByProductHandle,
-	byProductId: getMetafieldByProductId,
+type FindOptionalArgs = {
+	productHandle: string;
+	productId: string;
+};
+
+type FindMandatoryArgs = {
+	config: ShopifyFetchConfig;
+	namespace: string;
+	key: string;
+};
+
+type FindCollectionArgs = Merge<
+	RequireExactlyOne<FindOptionalArgs>,
+	FindMandatoryArgs
+>;
+
+const find = async ({
+	productId,
+	productHandle,
+	config,
+	namespace,
+	key,
+}: FindCollectionArgs) => {
+	if (productHandle) {
+		return getMetafieldByProductHandle(productHandle, config, namespace, key);
+	}
+
+	if (productId) {
+		return getMetafieldByProductId(productId, config, namespace, key);
+	}
+
+	throw new Error('provide either productId or productHandle');
+};
+
+export const metafield = {
+	find,
 };

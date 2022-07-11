@@ -30,12 +30,10 @@
 		"xo": "^0.44.0"
 	},
 	"xo": {
-		"prettier": true
-	},
-	"prettier": {
-		"trailingComma": "es5",
-		"singleQuote": true,
-		"bracketSpacing": false
+		"prettier": true,
+		"rules": {
+			"import/extensions": "off"
+		}
 	},
 	"dependencies": {}
 }

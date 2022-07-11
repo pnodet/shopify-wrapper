@@ -1,3 +1,4 @@
+import {Merge, RequireExactlyOne} from 'type-fest';
 import {shopifyFetch} from './fetch';
 import {
 	PRODUCT_BY_HANDLE_QUERY,
@@ -14,9 +15,9 @@ import {normalizeProduct} from '@/common/normalize/product';
 
 const getProductByHandle = async (
 	handle: string,
-	fetchConfig: ShopifyFetchConfig
+	fetchConfig: ShopifyFetchConfig,
 ): Promise<Storefront.Product | undefined> => {
-	const res = await shopifyFetch<
+	const response = await shopifyFetch<
 		ProductByHandleQuery,
 		ProductByHandleQueryVariables
 	>(
@@ -24,30 +25,61 @@ const getProductByHandle = async (
 		{
 			handle,
 		},
-		fetchConfig
+		fetchConfig,
 	);
 
-	if (!res?.product) return;
-	return normalizeProduct(res.product);
+	if (!response?.product) {
+		return;
+	}
+
+	return normalizeProduct(response.product);
 };
 
 const getProductById = async (
 	id: string,
-	fetchConfig: ShopifyFetchConfig
+	fetchConfig: ShopifyFetchConfig,
 ): Promise<Storefront.Product | undefined> => {
-	const res = await shopifyFetch<ProductByIdQuery, ProductByIdQueryVariables>(
+	const response = await shopifyFetch<
+		ProductByIdQuery,
+		ProductByIdQueryVariables
+	>(
 		PRODUCT_BY_ID_QUERY,
 		{
 			id,
 		},
-		fetchConfig
+		fetchConfig,
 	);
 
-	if (!res?.product) return;
-	return normalizeProduct(res.product);
+	if (!response?.product) {
+		return;
+	}
+
+	return normalizeProduct(response.product);
 };
 
-export const getProduct = {
-	byHandle: getProductByHandle,
-	byId: getProductById,
+type FindOptionalArgs = {
+	handle: string;
+	id: string;
+};
+type FindMandatoryArgs = {config: ShopifyFetchConfig};
+
+type FindCollectionArgs = Merge<
+	RequireExactlyOne<FindOptionalArgs>,
+	FindMandatoryArgs
+>;
+
+const find = async ({id, handle, config}: FindCollectionArgs) => {
+	if (handle) {
+		return getProductByHandle(handle, config);
+	}
+
+	if (id) {
+		return getProductById(id, config);
+	}
+
+	throw new Error('provide either id or handle');
+};
+
+export const product = {
+	find,
 };

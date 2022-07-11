@@ -1,3 +1,4 @@
+import {Merge, RequireExactlyOne} from 'type-fest';
 import {shopifyFetch} from './fetch';
 import {
 	CollectionByHandleQuery,
@@ -15,9 +16,9 @@ import type {Storefront, ShopifyFetchConfig} from '@/types/index';
 export const getCollectionByHandle = async (
 	handle: string,
 	fetchConfig: ShopifyFetchConfig,
-	maxProductsPerCollection = 10
+	maxProductsPerCollection = 10,
 ): Promise<Storefront.Collection | undefined> => {
-	const res = await shopifyFetch<
+	const response = await shopifyFetch<
 		CollectionByHandleQuery,
 		CollectionByHandleQueryVariables
 	>(
@@ -26,19 +27,22 @@ export const getCollectionByHandle = async (
 			handle,
 			maxProductsPerCollection,
 		},
-		fetchConfig
+		fetchConfig,
 	);
 
-	if (!res?.collection) return;
-	return normalizeCollection(res.collection);
+	if (!response?.collection) {
+		return;
+	}
+
+	return normalizeCollection(response.collection);
 };
 
 export const getCollectionById = async (
 	id: string,
 	fetchConfig: ShopifyFetchConfig,
-	maxProductsPerCollection = 10
+	maxProductsPerCollection = 10,
 ): Promise<Storefront.Collection | undefined> => {
-	const res = await shopifyFetch<
+	const response = await shopifyFetch<
 		CollectionByIdQuery,
 		CollectionByIdQueryVariables
 	>(
@@ -47,14 +51,39 @@ export const getCollectionById = async (
 			id,
 			maxProductsPerCollection,
 		},
-		fetchConfig
+		fetchConfig,
 	);
 
-	if (!res?.collection) return;
-	return normalizeCollection(res.collection);
+	if (!response?.collection) {
+		return;
+	}
+
+	return normalizeCollection(response.collection);
 };
 
-export const getCollection = {
-	byHandle: getCollectionByHandle,
-	byId: getCollectionById,
+type FindOptionalArgs = {
+	handle: string;
+	id: string;
+};
+type FindMandatoryArgs = {config: ShopifyFetchConfig};
+
+type FindCollectionArgs = Merge<
+	RequireExactlyOne<FindOptionalArgs>,
+	FindMandatoryArgs
+>;
+
+const find = async ({id, handle, config}: FindCollectionArgs) => {
+	if (handle) {
+		return getCollectionByHandle(handle, config);
+	}
+
+	if (id) {
+		return getCollectionById(id, config);
+	}
+
+	throw new Error('provide either id or handle');
+};
+
+export const collection = {
+	find,
 };
