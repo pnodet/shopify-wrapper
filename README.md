@@ -17,15 +17,12 @@
 
 ```
 $ npm install @shopify-wrapper/client
-
 ```
 
 or
 
 ```
-
 $ yarn add @shopify-wrapper/client
-
 ```
 
 ### Usage
@@ -50,15 +47,12 @@ const product = await shopifyWrapper.product.find({handle:'my-super-product', co
 
 ```
 $ npm install @shopify-wrapper/server
-
 ```
 
 or
 
 ```
-
 $ yarn add @shopify-wrapper/server
-
 ```
 
 ### Usage
