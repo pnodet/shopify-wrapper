@@ -18,3 +18,21 @@ export const PRODUCT_BY_ID_QUERY = gql`
 	}
 	${FullProduct}
 `;
+
+export const PRODUCTS_QUERY = gql`
+  query products($first: Int!) {
+    products(first: $first) {
+      pageInfo {
+        hasPreviousPage
+        hasNextPage
+      }
+      edges {
+        cursor
+        node {
+          ...FullProduct
+        }
+      }
+    }
+  }
+  ${FullProduct}
+`;

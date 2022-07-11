@@ -1,15 +1,19 @@
-import {find} from './collection';
-import {findMany} from './collections';
-import {product} from './product';
+import {find as findCollection} from './collection';
+import {findMany as findCollections} from './collections';
+import {find as findProduct} from './product';
+import {findMany as findProducts} from './products';
 import {customer} from './customer';
 import {metafield} from './metafield';
 
 const shopifyWrapper = {
 	collection: {
-		find,
-		findMany,
+		find: findCollection,
+		findMany: findCollections,
 	},
-	product,
+	product: {
+		find: findProduct,
+		findMany: findProducts,
+	},
 	customer,
 	metafield,
 };
