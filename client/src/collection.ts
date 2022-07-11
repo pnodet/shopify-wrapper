@@ -72,7 +72,7 @@ type FindCollectionArgs = Merge<
 	FindMandatoryArgs
 >;
 
-const find = async ({id, handle, config}: FindCollectionArgs) => {
+export const find = async ({id, handle, config}: FindCollectionArgs) => {
 	if (handle) {
 		return getCollectionByHandle(handle, config);
 	}
@@ -82,8 +82,4 @@ const find = async ({id, handle, config}: FindCollectionArgs) => {
 	}
 
 	throw new Error('provide either id or handle');
-};
-
-export const collection = {
-	find,
 };

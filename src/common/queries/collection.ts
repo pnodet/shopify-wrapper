@@ -35,3 +35,29 @@ export const COLLECTION_BY_HANDLE_QUERY = gql`
 	${FullCollection}
 	${FullProduct}
 `;
+
+export const COLLECTIONS_QUERY = gql`
+  query collections($first: Int!, $maxProductsPerCollection: Int!) {
+    collections(first: $first) {
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+      }
+      edges {
+        cursor
+        node {
+          ...FullCollection
+          products(first: $maxProductsPerCollection) {
+            edges {
+              node {
+                ...FullProduct
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  ${FullCollection}
+  ${FullProduct}
+`;
