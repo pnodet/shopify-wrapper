@@ -13,7 +13,7 @@
 		"test": "turbo run test"
 	},
 	"engines": {
-		"node": ">=14.16"
+		"node": ">=16"
 	},
 	"author": {
 		"name": "pnxdxt",
