@@ -10,15 +10,12 @@
 
 ```
 $ npm install @shopify-wrapper/client
-
 ```
 
 or
 
 ```
-
 $ yarn add @shopify-wrapper/client
-
 ```
 
 ## Usage
