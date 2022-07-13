@@ -1,8 +1,8 @@
 import type {Storefront} from '../../types';
-import {FullCustomerFragment} from '../schema';
+import {FullCustomerFragment} from '../graphql/schema';
 
 export const normalizeCustomer = (
-	customer: FullCustomerFragment
+	customer: FullCustomerFragment,
 ): Storefront.Customer => ({
 	id: customer.id,
 	displayName: customer.displayName,

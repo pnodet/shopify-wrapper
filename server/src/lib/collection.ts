@@ -1,6 +1,9 @@
 import {productWithPlaiceholder} from './product-plaiceholder';
+import {
+	FullCollectionFragment,
+	FullProductFragment,
+} from '@/common/graphql/schema';
 import type {Storefront} from '@/types/index';
-import {FullCollectionFragment, FullProductFragment} from '@/common/schema';
 
 export const normalizeCollection = async (
 	collection: FullCollectionFragment,

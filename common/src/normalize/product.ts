@@ -1,10 +1,9 @@
-/* eslint-disable @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call */
 import type {Storefront} from '../../types';
-import {BasicProductFragment, FullProductFragment} from '../schema';
+import {BasicProductFragment, FullProductFragment} from '../graphql/schema';
 
 export const normalizeProduct = (
 	product: FullProductFragment,
-	plaiceholderImages?: Map<string, string | undefined>
+	plaiceholderImages?: Map<string, string | undefined>,
 ): Storefront.Product => ({
 	__typename: product.__typename ?? 'Product',
 	id: product.id,
@@ -75,7 +74,7 @@ type ReturnNormalizeBasicProduct = {
 };
 
 export const normalizeBasicProduct = (
-	product: BasicProductFragment
+	product: BasicProductFragment,
 ): ReturnNormalizeBasicProduct => ({
 	id: product.id,
 	name: product.title,

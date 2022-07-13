@@ -1,5 +1,5 @@
 import type {Storefront} from '../../types';
-import {FullImageFragment, FullMetafieldFragment} from '../schema';
+import {FullImageFragment, FullMetafieldFragment} from '../graphql/schema';
 import {normalizeProduct} from './product';
 import {normalizeImage} from './image';
 import {normalizeProductVariant} from './product-variant';
@@ -28,8 +28,9 @@ function checkType(type: string): type is Storefront.Metafield['type'] {
 	].includes(type);
 }
 
+// eslint-disable-next-line complexity
 export const normalizeMetafield = (
-	metafield: FullMetafieldFragment
+	metafield: FullMetafieldFragment,
 ): Storefront.Metafield | undefined => {
 	const {type} = metafield;
 	if (!checkType(type)) return;
@@ -74,22 +75,14 @@ export const normalizeMetafield = (
 
 		case 'weight':
 		case 'volume':
-		case 'dimension': {
-			return {
-				id: metafield.id,
-				namespace: metafield.namespace,
-				key: metafield.key,
-				type,
-				value: JSON.parse(metafield.value),
-			};
-		}
-
+		case 'dimension':
 		case 'rating': {
 			return {
 				id: metafield.id,
 				namespace: metafield.namespace,
 				key: metafield.key,
 				type,
+				// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
 				value: JSON.parse(metafield.value),
 			};
 		}
@@ -140,6 +133,8 @@ export const normalizeMetafield = (
 					type,
 					value: normalizeImage(metafield.reference.image as FullImageFragment),
 				};
+
+			break;
 		}
 
 		default:

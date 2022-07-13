@@ -1,9 +1,9 @@
 import type {Storefront} from '../../types';
-import {FullImageFragment} from '../schema';
+import {FullImageFragment} from '../graphql/schema';
 
 export const normalizeImage = (
 	img: FullImageFragment,
-	plaiceholderImages?: Map<string, string | undefined>
+	plaiceholderImages?: Map<string, string | undefined>,
 ): Storefront.Image => ({
 	id: img.id,
 	url: img.originalSrc,

@@ -1,58 +1,20 @@
-import type {Merge, RequireExactlyOne} from 'type-fest';
-import {shopifyFetch} from './fetch';
-import {normalizeCollection} from './lib/collection';
+import {Merge, RequireExactlyOne} from 'type-fest';
 import {
 	CollectionByHandleQuery,
-	CollectionByHandleQueryVariables,
 	CollectionByIdQuery,
-	CollectionByIdQueryVariables,
-} from '@/common/schema';
+} from '@/common/graphql/schema';
+import {shopifyFetch} from './fetch';
 import {
-	COLLECTION_BY_HANDLE_QUERY,
-	COLLECTION_BY_ID_QUERY,
-} from '@/common/queries/collection';
+	getCollectionByHandle,
+	getCollectionById,
+} from '@/common/functions/collection';
+import type {ShopifyFetchConfig} from '@/types/index';
+import {normalizeCollection} from './lib/collection';
 
-import type {Storefront, ShopifyFetchConfig} from '@/types/index';
-
-const getCollectionById = async (
-	id: string,
-	fetchConfig: ShopifyFetchConfig,
-	maxProductsPerCollection = 10,
-): Promise<Storefront.Collection | undefined> => {
-	const response = await shopifyFetch<
-		CollectionByIdQuery,
-		CollectionByIdQueryVariables
-	>(
-		COLLECTION_BY_ID_QUERY,
-		{
-			id,
-			maxProductsPerCollection,
-		},
-		fetchConfig,
-	);
-
-	if (!response?.collection) return;
-	return normalizeCollection(response.collection);
-};
-
-const getCollectionByHandle = async (
-	handle: string,
-	fetchConfig: ShopifyFetchConfig,
-	maxProductsPerCollection = 10,
-): Promise<Storefront.Collection | undefined> => {
-	const response = await shopifyFetch<
-		CollectionByHandleQuery,
-		CollectionByHandleQueryVariables
-	>(
-		COLLECTION_BY_HANDLE_QUERY,
-		{
-			handle,
-			maxProductsPerCollection,
-		},
-		fetchConfig,
-	);
-
-	if (!response?.collection) return;
+const normalize = (
+	response?: CollectionByHandleQuery | CollectionByIdQuery,
+) => {
+	if (!response?.collection) return undefined;
 	return normalizeCollection(response.collection);
 };
 
@@ -68,7 +30,15 @@ type FindCollectionArgs = Merge<
 >;
 
 export const find = async ({id, handle, config}: FindCollectionArgs) => {
-	if (handle) return getCollectionByHandle(handle, config);
-	if (id) return getCollectionById(id, config);
+	if (handle) {
+		 const result = await getCollectionByHandle(handle, config, shopifyFetch)
+		 return normalize(result);
+	}
+
+	if (id) {
+		const result = await getCollectionById(id, config, shopifyFetch)
+		return normalize(result);
+	}
+
 	throw new Error('provide either id or handle');
 };

@@ -1,5 +1,5 @@
-import gql from 'graphql-tag';
-import {FullProduct} from '../fragments.js';
+import {gql} from 'graphql-tag';
+import {FullProduct} from '../graphql/fragments.js';
 
 export const PRODUCT_BY_HANDLE_QUERY = gql`
 	query productByHandle($handle: String!) {
@@ -20,19 +20,19 @@ export const PRODUCT_BY_ID_QUERY = gql`
 `;
 
 export const PRODUCTS_QUERY = gql`
-  query products($first: Int!) {
-    products(first: $first) {
-      pageInfo {
-        hasPreviousPage
-        hasNextPage
-      }
-      edges {
-        cursor
-        node {
-          ...FullProduct
-        }
-      }
-    }
-  }
-  ${FullProduct}
+	query products($first: Int!) {
+		products(first: $first) {
+			pageInfo {
+				hasPreviousPage
+				hasNextPage
+			}
+			edges {
+				cursor
+				node {
+					...FullProduct
+				}
+			}
+		}
+	}
+	${FullProduct}
 `;

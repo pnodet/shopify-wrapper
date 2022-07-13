@@ -8,8 +8,8 @@
     "declaration": true,
     "baseUrl": ".",
 		"paths": {
-			"@/common/*": ["../src/common/*"],
-			"@/types/*": ["../src/types/*"],
+			"@/common/*": ["../common/src/*"],
+			"@/types/*": ["../common/types/*"],
 		}
   }
 }

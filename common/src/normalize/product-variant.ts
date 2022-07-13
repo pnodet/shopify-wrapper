@@ -1,10 +1,13 @@
 import type {Storefront} from '../../types';
-import {FullImageFragment, FullVariantWithProductFragment} from '../schema';
+import {
+	FullImageFragment,
+	FullVariantWithProductFragment,
+} from '../graphql/schema';
 import {normalizeImage} from './image';
 import {normalizeBasicProduct} from './product';
 
 export const normalizeProductVariant = (
-	variant: FullVariantWithProductFragment
+	variant: FullVariantWithProductFragment,
 ): Storefront.ProductVariant => ({
 	id: variant.id,
 	name: variant.title,

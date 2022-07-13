@@ -1,59 +1,14 @@
 import {Merge, RequireExactlyOne} from 'type-fest';
 import {shopifyFetch} from './fetch';
-import {
-	PRODUCT_BY_HANDLE_QUERY,
-	PRODUCT_BY_ID_QUERY,
-} from '@/common/queries/product';
-import {
-	ProductByHandleQuery,
-	ProductByHandleQueryVariables,
-	ProductByIdQuery,
-	ProductByIdQueryVariables,
-} from '@/common/schema';
+import {ProductByHandleQuery, ProductByIdQuery} from '@/common/graphql/schema';
 import type {Storefront, ShopifyFetchConfig} from '@/types/index';
 import {normalizeProduct} from '@/common/normalize/product';
+import {getProductByHandle, getProductById} from '@/common/functions/product';
 
-const getProductByHandle = async (
-	handle: string,
-	fetchConfig: ShopifyFetchConfig,
-): Promise<Storefront.Product | undefined> => {
-	const response = await shopifyFetch<
-		ProductByHandleQuery,
-		ProductByHandleQueryVariables
-	>(
-		PRODUCT_BY_HANDLE_QUERY,
-		{
-			handle,
-		},
-		fetchConfig,
-	);
-
-	if (!response?.product) {
-		return;
-	}
-
-	return normalizeProduct(response.product);
-};
-
-const getProductById = async (
-	id: string,
-	fetchConfig: ShopifyFetchConfig,
-): Promise<Storefront.Product | undefined> => {
-	const response = await shopifyFetch<
-		ProductByIdQuery,
-		ProductByIdQueryVariables
-	>(
-		PRODUCT_BY_ID_QUERY,
-		{
-			id,
-		},
-		fetchConfig,
-	);
-
-	if (!response?.product) {
-		return;
-	}
-
+const normalize = (
+	response?: ProductByHandleQuery | ProductByIdQuery,
+): Storefront.Product | undefined => {
+	if (!response?.product) return undefined;
 	return normalizeProduct(response.product);
 };
 
@@ -70,11 +25,13 @@ type FindCollectionArgs = Merge<
 
 export const find = async ({id, handle, config}: FindCollectionArgs) => {
 	if (handle) {
-		return getProductByHandle(handle, config);
+		const result = await getProductByHandle(handle, config, shopifyFetch);
+		return normalize(result);
 	}
 
 	if (id) {
-		return getProductById(id, config);
+		const result = await getProductById(id, config, shopifyFetch);
+		return normalize(result);
 	}
 
 	throw new Error('provide either id or handle');

@@ -1,6 +1,6 @@
 import {getPlaiceholder} from 'plaiceholder';
+import {FullProductFragment} from '@/common/graphql/schema';
 import type {Storefront} from '@/types/index';
-import {FullProductFragment} from '@/common/schema';
 import {normalizeProduct} from '@/common/normalize/product';
 
 export const productWithPlaiceholder = async (

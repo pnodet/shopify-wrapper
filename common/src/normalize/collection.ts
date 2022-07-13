@@ -1,10 +1,10 @@
 import type {Storefront} from '../../types';
-import {FullCollectionFragment, FullProductFragment} from '../schema';
+import {FullCollectionFragment, FullProductFragment} from '../graphql/schema';
 import {normalizeProduct} from './product';
 
 export const normalizeCollection = (
 	collection: FullCollectionFragment,
-	products?: FullProductFragment[]
+	products?: FullProductFragment[],
 ): Storefront.Collection => ({
 	__typename: collection.__typename ?? 'Collection',
 	id: collection.id,
@@ -19,6 +19,6 @@ export const normalizeCollection = (
 		width: collection.image.width,
 		height: collection.image.height,
 	},
-	products: products?.map((product) => normalizeProduct(product)) ?? [],
+	products: products?.map(product => normalizeProduct(product)) ?? [],
 	customFields: {},
 });

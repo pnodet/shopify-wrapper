@@ -1,12 +1,14 @@
-/* eslint-disable @typescript-eslint/naming-convention, @typescript-eslint/no-redeclare */
+/* eslint-disable @typescript-eslint/no-redeclare, unicorn/prevent-abbreviations */
+
+import {Except} from 'type-fest';
 
 export type Maybe<T> = T | undefined;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends Record<string, unknown>> = {[K in keyof T]: T[K]};
-export type MakeOptional<T, K extends keyof T> = Omit<T, K> & {
+export type MakeOptional<T, K extends keyof T> = Except<T, K> & {
 	[SubKey in K]?: Maybe<T[SubKey]>;
 };
-export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & {
+export type MakeMaybe<T, K extends keyof T> = Except<T, K> & {
 	[SubKey in K]: Maybe<T[SubKey]>;
 };
 /** All built-in and custom scalars, mapped to their actual values */
@@ -10614,6 +10616,16 @@ export type MetafieldByProductHandleQuery = {
 		  }
 		| undefined;
 };
+
+export type MetafieldsByProductHandleQueryVariables = Exact<{
+	handle: Scalars['String'];
+	amount: Scalars['Int'];
+}>;
+
+export type MetafieldsByProductIdQueryVariables = Exact<{
+	id: Scalars['ID'];
+	amount: Scalars['Int'];
+}>;
 
 export type MetafieldByProductIdQueryVariables = Exact<{
 	id: Scalars['ID'];

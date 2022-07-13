@@ -1,5 +1,5 @@
 import type {Storefront} from '../../types';
-import {FullPageFragment} from '../schema';
+import {FullPageFragment} from '../graphql/schema';
 
 export const normalizePage = (page: FullPageFragment): Storefront.Page => ({
 	id: page.id,

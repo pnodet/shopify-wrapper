@@ -1,102 +1,24 @@
 import type {Merge, RequireExactlyOne} from 'type-fest';
 import {shopifyFetch} from './fetch';
-import {
-	CollectionByHandleQuery,
-	CollectionByHandleQueryVariables,
-	CollectionByIdQuery,
-	CollectionByIdQueryVariables,
-	CollectionsQuery,
-	CollectionsQueryVariables,
-} from '@/common/schema';
-import {
-	COLLECTIONS_QUERY,
-	COLLECTION_BY_HANDLE_QUERY,
-	COLLECTION_BY_ID_QUERY,
-} from '@/common/queries/collection';
 import {normalizeCollection} from '@/common/normalize/collection';
+import {
+	getCollections,
+	getCollectionsByHandles,
+	getCollectionsByIds,
+	ResultCollections,
+	ResultCollectionsByHandles,
+	ResultCollectionsByIds,
+} from '@/common/functions/collections';
+import type {ShopifyFetchConfig} from '@/types/index';
 
-import type {Storefront, ShopifyFetchConfig} from '@/types/index';
-
-const cleanCollections = (
-	responses: Array<CollectionByIdQuery | CollectionByHandleQuery | undefined>,
+const normalize = (
+	response?:
+		| ResultCollections
+		| ResultCollectionsByHandles
+		| ResultCollectionsByIds,
 ) => {
-	const dirtyCollections = responses
-		.map(response => response?.collection)
-		.filter(
-			(
-				collection,
-			): collection is NonNullable<CollectionByIdQuery['collection']> =>
-				Boolean(collection),
-		);
-
-	const collections = dirtyCollections.map(collection =>
-		normalizeCollection(collection),
-	);
-	return collections;
-};
-
-const getCollectionsByIds = async (
-	ids: string[],
-	fetchConfig: ShopifyFetchConfig,
-	maxProductsPerCollection = 10,
-): Promise<Storefront.Collection[] | undefined> =>
-	cleanCollections(
-		await Promise.all(
-			ids.map(async id =>
-				shopifyFetch<CollectionByIdQuery, CollectionByIdQueryVariables>(
-					COLLECTION_BY_ID_QUERY,
-					{
-						id,
-						maxProductsPerCollection,
-					},
-					fetchConfig,
-				),
-			),
-		),
-	);
-
-const getCollectionsByHandles = async (
-	handles: string[],
-	fetchConfig: ShopifyFetchConfig,
-	maxProductsPerCollection = 10,
-): Promise<Storefront.Collection[] | undefined> =>
-	cleanCollections(
-		await Promise.all(
-			handles.map(async handle =>
-				shopifyFetch<CollectionByHandleQuery, CollectionByHandleQueryVariables>(
-					COLLECTION_BY_HANDLE_QUERY,
-					{
-						handle,
-						maxProductsPerCollection,
-					},
-					fetchConfig,
-				),
-			),
-		),
-	);
-
-const getCollections = async (
-	amount: number,
-	fetchConfig: ShopifyFetchConfig,
-	maxProductsPerCollection = 10,
-): Promise<Storefront.Collection[] | undefined> => {
-	const response = await shopifyFetch<
-		CollectionsQuery,
-		CollectionsQueryVariables
-	>(
-		COLLECTIONS_QUERY,
-		{
-			first: amount,
-			maxProductsPerCollection,
-		},
-		fetchConfig,
-	);
-
-	if (!response) return [];
-
-	return response.collections.edges.map(({node: collection}) =>
-		normalizeCollection(collection),
-	);
+	if (!response) return undefined;
+	return response.map(value => normalizeCollection(value));
 };
 
 type FindOptionalArgs = {
@@ -121,9 +43,35 @@ export const findMany = async ({
 	config,
 	maxProductsPerCollection,
 }: FindCollectionArgs) => {
-	if (handles)
-		return getCollectionsByHandles(handles, config, maxProductsPerCollection);
-	if (ids) return getCollectionsByIds(ids, config, maxProductsPerCollection);
-	if (amount) return getCollections(amount, config, maxProductsPerCollection);
+	if (handles) {
+		const result = await getCollectionsByHandles(
+			handles,
+			config,
+			shopifyFetch,
+			maxProductsPerCollection,
+		);
+		return normalize(result);
+	}
+
+	if (ids) {
+		const result = await getCollectionsByIds(
+			ids,
+			config,
+			shopifyFetch,
+			maxProductsPerCollection,
+		);
+		return normalize(result);
+	}
+
+	if (amount) {
+		const result = await getCollections(
+			amount,
+			config,
+			shopifyFetch,
+			maxProductsPerCollection,
+		);
+		return normalize(result);
+	}
+
 	throw new Error('provide either ids or handles');
 };
