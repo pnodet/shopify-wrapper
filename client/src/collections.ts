@@ -9,7 +9,7 @@ import {
 	ResultCollectionsByHandles,
 	ResultCollectionsByIds,
 } from '@/common/functions/collections';
-import type {ShopifyFetchConfig} from '@/types/index';
+import type {ShopifyFetchConfig, Storefront} from '@/types/index';
 
 const normalize = (
 	response?:
@@ -18,7 +18,16 @@ const normalize = (
 		| ResultCollectionsByIds,
 ) => {
 	if (!response) return undefined;
-	return response.map(value => normalizeCollection(value));
+	if (!response) return undefined;
+	const values = response.map(value => {
+		if (!value) return undefined;
+		return normalizeCollection(value);
+	});
+
+	return values.filter(
+		(collection): collection is NonNullable<Storefront.Collection> =>
+			Boolean(collection),
+	);
 };
 
 type FindOptionalArgs = {

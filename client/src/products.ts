@@ -15,7 +15,14 @@ const normalize = (
 	response?: ResultProducts | ResultProductsByHandles | ResultProductsByIds,
 ): Storefront.Product[] | undefined => {
 	if (!response) return undefined;
-	return response.map(value => normalizeProduct(value));
+	const values = response.map(value => {
+		if (!value) return undefined;
+		return normalizeProduct(value);
+	});
+
+	return values.filter((product): product is NonNullable<Storefront.Product> =>
+		Boolean(product),
+	);
 };
 
 type FindOptionalArgs = {
