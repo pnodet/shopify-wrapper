@@ -1,4 +1,4 @@
-# @shopify-wrapper
+# shopify-wrapper
 
 > Query and mutate shopfiy data easily and safely
 
@@ -44,8 +44,8 @@ const config = {
 };
 
 const product = await shopifyWrapper.product.find({
-	handle: 'my-super-product',
-	config,
+  handle: 'my-super-product',
+  config,
 });
 ```
 
