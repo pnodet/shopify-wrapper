@@ -10,6 +10,7 @@ import {
 	ResultCollectionsByIds,
 } from '@/common/functions/collections';
 import type {ShopifyFetchConfig, Storefront} from '@/types/index';
+import { shouldNotRunMsg, shouldRun } from './lib/should-run';
 
 const normalize = (
 	response?:
@@ -53,6 +54,7 @@ export const findMany = async ({
 	maxProductsPerCollection,
 }: FindCollectionArgs) => {
 	if (handles) {
+				if (!shouldRun()) throw new Error(shouldNotRunMsg);
 		const result = await getCollectionsByHandles(
 			handles,
 			config,
@@ -63,6 +65,7 @@ export const findMany = async ({
 	}
 
 	if (ids) {
+				if (!shouldRun()) throw new Error(shouldNotRunMsg);
 		const result = await getCollectionsByIds(
 			ids,
 			config,
@@ -73,6 +76,7 @@ export const findMany = async ({
 	}
 
 	if (amount) {
+				if (!shouldRun()) throw new Error(shouldNotRunMsg);
 		const result = await getCollections(
 			amount,
 			config,

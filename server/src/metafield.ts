@@ -10,6 +10,7 @@ import {
 	getMetafieldByProductHandle,
 	getMetafieldByProductId,
 } from '@/common/functions/metafield';
+import { shouldRun, shouldNotRunMsg } from './lib/should-run';
 
 const normalize = (
 	response?: MetafieldByProductIdQuery | MetafieldByProductHandleQuery,
@@ -42,6 +43,7 @@ export const find = async ({
 	key,
 }: FindCollectionArgs) => {
 	if (productHandle) {
+		if (!shouldRun()) throw new Error(shouldNotRunMsg);
 		const result = await getMetafieldByProductHandle(
 			productHandle,
 			config,
@@ -53,6 +55,7 @@ export const find = async ({
 	}
 
 	if (productId) {
+		if (!shouldRun()) throw new Error(shouldNotRunMsg);
 		const result = await getMetafieldByProductId(
 			productId,
 			config,

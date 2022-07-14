@@ -4,6 +4,7 @@ import {productWithPlaiceholder} from './lib/product-plaiceholder';
 import {ProductByHandleQuery, ProductByIdQuery} from '@/common/graphql/schema';
 import type {Storefront, ShopifyFetchConfig} from '@/types/index';
 import {getProductByHandle, getProductById} from '@/common/functions/product';
+import { shouldRun, shouldNotRunMsg } from './lib/should-run';
 
 const normalize = async (
 	response?: ProductByHandleQuery | ProductByIdQuery,
@@ -25,11 +26,13 @@ type FindCollectionArgs = Merge<
 
 export const find = async ({id, handle, config}: FindCollectionArgs) => {
 	if (handle) {
+		if (!shouldRun()) throw new Error(shouldNotRunMsg);
 		const result = await getProductByHandle(handle, config, shopifyFetch);
 		return normalize(result);
 	}
 
 	if (id) {
+		if (!shouldRun()) throw new Error(shouldNotRunMsg);
 		const result = await getProductById(id, config, shopifyFetch);
 		return normalize(result);
 	}

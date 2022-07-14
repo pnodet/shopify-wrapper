@@ -10,6 +10,7 @@ import {
 	getProductsByHandles,
 	getProductsByIds,
 } from '@/common/functions/products';
+import { shouldRun, shouldNotRunMsg } from './lib/should-run';
 
 const normalize = async (
 	response?: ResultProducts | ResultProductsByHandles | ResultProductsByIds,
@@ -47,16 +48,19 @@ export const findMany = async ({
 	config,
 }: FindProductsArgs) => {
 	if (handles) {
+		if (!shouldRun()) throw new Error(shouldNotRunMsg);
 		const result = await getProductsByHandles(handles, config, shopifyFetch);
 		return normalize(result);
 	}
 
 	if (ids) {
+		if (!shouldRun()) throw new Error(shouldNotRunMsg);
 		const result = await getProductsByIds(ids, config, shopifyFetch);
 		return normalize(result);
 	}
 
 	if (amount) {
+		if (!shouldRun()) throw new Error(shouldNotRunMsg);
 		const result = await getProducts(amount, config, shopifyFetch);
 		return normalize(result);
 	}

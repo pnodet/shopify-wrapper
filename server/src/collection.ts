@@ -1,15 +1,16 @@
 import {Merge, RequireExactlyOne} from 'type-fest';
+import {shopifyFetch} from './fetch';
+import {normalizeCollection} from './lib/collection';
 import {
 	CollectionByHandleQuery,
 	CollectionByIdQuery,
 } from '@/common/graphql/schema';
-import {shopifyFetch} from './fetch';
 import {
 	getCollectionByHandle,
 	getCollectionById,
 } from '@/common/functions/collection';
 import type {ShopifyFetchConfig} from '@/types/index';
-import {normalizeCollection} from './lib/collection';
+import { shouldNotRunMsg, shouldRun } from './lib/should-run';
 
 const normalize = (
 	response?: CollectionByHandleQuery | CollectionByIdQuery,
@@ -31,12 +32,14 @@ type FindCollectionArgs = Merge<
 
 export const find = async ({id, handle, config}: FindCollectionArgs) => {
 	if (handle) {
-		 const result = await getCollectionByHandle(handle, config, shopifyFetch)
-		 return normalize(result);
+		if (!shouldRun()) throw new Error(shouldNotRunMsg);
+		const result = await getCollectionByHandle(handle, config, shopifyFetch);
+		return normalize(result);
 	}
-
+	
 	if (id) {
-		const result = await getCollectionById(id, config, shopifyFetch)
+		if (!shouldRun()) throw new Error(shouldNotRunMsg);
+		const result = await getCollectionById(id, config, shopifyFetch);
 		return normalize(result);
 	}
 
