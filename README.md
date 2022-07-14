@@ -28,7 +28,7 @@ $ yarn add @shopify-wrapper/client
 ### Usage
 
 ```js
-import shopifyWrapper from @shopify-wrapper/client
+import shopifyWrapper from '@shopify-wrapper/client'
 
 const config = {
 	domain: process.env.domain,
@@ -58,7 +58,7 @@ $ yarn add @shopify-wrapper/server
 ### Usage
 
 ```js
-import shopifyWrapper from @shopify-wrapper/server
+import shopifyWrapper from '@shopify-wrapper/server'
 
 const config = {
 	domain: process.env.domain,
