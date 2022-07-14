@@ -1,5 +1,6 @@
 import {Merge, RequireExactlyOne} from 'type-fest';
 import {shopifyFetch} from './fetch';
+import {errorMessage, shouldRun} from './lib/should-run';
 import {
 	CollectionByHandleQuery,
 	CollectionByIdQuery,
@@ -10,7 +11,6 @@ import {
 	getCollectionById,
 } from '@/common/functions/collection';
 import type {ShopifyFetchConfig} from '@/types/index';
-import { shouldNotRunMsg, shouldRun } from './lib/should-run';
 
 const normalize = (
 	response?: CollectionByHandleQuery | CollectionByIdQuery,
@@ -32,13 +32,13 @@ type FindCollectionArgs = Merge<
 
 export const find = async ({id, handle, config}: FindCollectionArgs) => {
 	if (handle) {
-		if (!shouldRun()) throw new Error(shouldNotRunMsg);
+		if (!shouldRun()) throw new Error(errorMessage);
 		const result = await getCollectionByHandle(handle, config, shopifyFetch);
 		return normalize(result);
 	}
-	
+
 	if (id) {
-		if (!shouldRun()) throw new Error(shouldNotRunMsg);
+		if (!shouldRun()) throw new Error(errorMessage);
 		const result = await getCollectionById(id, config, shopifyFetch);
 		return normalize(result);
 	}

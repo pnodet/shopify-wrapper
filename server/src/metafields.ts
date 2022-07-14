@@ -1,11 +1,11 @@
 import {Merge, RequireExactlyOne} from 'type-fest';
+import {shopifyFetch} from './fetch';
 import {
 	MetafieldByProductHandleQuery,
 	MetafieldByProductIdQuery,
 	MetafieldsByProductHandleQueryVariables,
 	MetafieldsByProductIdQueryVariables,
-} from '../common/common/schema.js';
-import {shopifyFetch} from './fetch';
+} from '@/common/graphql/schema.js';
 import {normalizeMetafield} from '@/common/normalize/metafield';
 import {
 	METAFIELDS_BY_PRODUCT_HANDLE_QUERY,

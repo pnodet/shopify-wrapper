@@ -1,5 +1,6 @@
 import {Merge, RequireExactlyOne} from 'type-fest';
 import {shopifyFetch} from './fetch';
+import {errorMessage, shouldRun} from './lib/should-run';
 import {
 	MetafieldByProductHandleQuery,
 	MetafieldByProductIdQuery,
@@ -10,7 +11,6 @@ import {
 	getMetafieldByProductHandle,
 	getMetafieldByProductId,
 } from '@/common/functions/metafield';
-import { shouldNotRunMsg, shouldRun } from './lib/should-run';
 
 const normalize = (
 	response?: MetafieldByProductIdQuery | MetafieldByProductHandleQuery,
@@ -43,7 +43,7 @@ export const find = async ({
 	key,
 }: FindCollectionArgs) => {
 	if (productHandle) {
-			if (!shouldRun()) throw new Error(shouldNotRunMsg);
+		if (!shouldRun()) throw new Error(errorMessage);
 		const result = await getMetafieldByProductHandle(
 			productHandle,
 			config,
@@ -55,7 +55,7 @@ export const find = async ({
 	}
 
 	if (productId) {
-			if (!shouldRun()) throw new Error(shouldNotRunMsg);
+		if (!shouldRun()) throw new Error(errorMessage);
 		const result = await getMetafieldByProductId(
 			productId,
 			config,

@@ -1,6 +1,7 @@
 import type {Merge, RequireExactlyOne} from 'type-fest';
 import {shopifyFetch} from './fetch';
 import {normalizeCollection} from './lib/collection';
+import {shouldRun, errorMessage} from './lib/should-run';
 import {
 	getCollections,
 	getCollectionsByHandles,
@@ -10,7 +11,6 @@ import {
 	ResultCollectionsByIds,
 } from '@/common/functions/collections';
 import type {ShopifyFetchConfig, Storefront} from '@/types/index';
-import { shouldRun, shouldNotRunMsg } from './lib/should-run';
 
 const normalize = async (
 	response?:
@@ -54,7 +54,7 @@ export const findMany = async ({
 	maxProductsPerCollection,
 }: FindCollectionArgs) => {
 	if (handles) {
-		if (!shouldRun()) throw new Error(shouldNotRunMsg);
+		if (!shouldRun()) throw new Error(errorMessage);
 		const result = await getCollectionsByHandles(
 			handles,
 			config,
@@ -65,7 +65,7 @@ export const findMany = async ({
 	}
 
 	if (ids) {
-		if (!shouldRun()) throw new Error(shouldNotRunMsg);
+		if (!shouldRun()) throw new Error(errorMessage);
 		const result = await getCollectionsByIds(
 			ids,
 			config,
@@ -76,7 +76,7 @@ export const findMany = async ({
 	}
 
 	if (amount) {
-		if (!shouldRun()) throw new Error(shouldNotRunMsg);
+		if (!shouldRun()) throw new Error(errorMessage);
 		const result = await getCollections(
 			amount,
 			config,

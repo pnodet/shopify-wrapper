@@ -1,10 +1,10 @@
 import {Merge, RequireExactlyOne} from 'type-fest';
 import {shopifyFetch} from './fetch';
+import {errorMessage, shouldRun} from './lib/should-run';
 import {ProductByHandleQuery, ProductByIdQuery} from '@/common/graphql/schema';
 import type {Storefront, ShopifyFetchConfig} from '@/types/index';
 import {normalizeProduct} from '@/common/normalize/product';
 import {getProductByHandle, getProductById} from '@/common/functions/product';
-import { shouldNotRunMsg, shouldRun } from './lib/should-run';
 
 const normalize = (
 	response?: ProductByHandleQuery | ProductByIdQuery,
@@ -26,13 +26,13 @@ type FindCollectionArgs = Merge<
 
 export const find = async ({id, handle, config}: FindCollectionArgs) => {
 	if (handle) {
-			if (!shouldRun()) throw new Error(shouldNotRunMsg);
+		if (!shouldRun()) throw new Error(errorMessage);
 		const result = await getProductByHandle(handle, config, shopifyFetch);
 		return normalize(result);
 	}
 
 	if (id) {
-			if (!shouldRun()) throw new Error(shouldNotRunMsg);
+		if (!shouldRun()) throw new Error(errorMessage);
 		const result = await getProductById(id, config, shopifyFetch);
 		return normalize(result);
 	}

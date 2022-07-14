@@ -1,6 +1,7 @@
 import type {Merge, RequireExactlyOne} from 'type-fest';
 import {shopifyFetch} from './fetch';
 import {productWithPlaiceholder} from './lib/product-plaiceholder';
+import {shouldRun, errorMessage} from './lib/should-run';
 import type {Storefront, ShopifyFetchConfig} from '@/types/index';
 import {
 	ResultProducts,
@@ -10,7 +11,6 @@ import {
 	getProductsByHandles,
 	getProductsByIds,
 } from '@/common/functions/products';
-import { shouldRun, shouldNotRunMsg } from './lib/should-run';
 
 const normalize = async (
 	response?: ResultProducts | ResultProductsByHandles | ResultProductsByIds,
@@ -48,19 +48,19 @@ export const findMany = async ({
 	config,
 }: FindProductsArgs) => {
 	if (handles) {
-		if (!shouldRun()) throw new Error(shouldNotRunMsg);
+		if (!shouldRun()) throw new Error(errorMessage);
 		const result = await getProductsByHandles(handles, config, shopifyFetch);
 		return normalize(result);
 	}
 
 	if (ids) {
-		if (!shouldRun()) throw new Error(shouldNotRunMsg);
+		if (!shouldRun()) throw new Error(errorMessage);
 		const result = await getProductsByIds(ids, config, shopifyFetch);
 		return normalize(result);
 	}
 
 	if (amount) {
-		if (!shouldRun()) throw new Error(shouldNotRunMsg);
+		if (!shouldRun()) throw new Error(errorMessage);
 		const result = await getProducts(amount, config, shopifyFetch);
 		return normalize(result);
 	}
