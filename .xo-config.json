@@ -1,6 +1,8 @@
 {
 	"prettier": true,
+	"ignore": [ "vite.config.ts"],
 	"rules": {
-		"import/extensions": "off"
+		"import/extensions": "off",
+		"@typescript-eslint/naming-convention": "warn"
 	}
 }
