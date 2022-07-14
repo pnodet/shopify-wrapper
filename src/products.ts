@@ -1,5 +1,5 @@
 import type {Merge, RequireExactlyOne} from 'type-fest';
-import {shopifyFetch} from './fetch';
+import {shopifyFetch} from './http';
 import {
 	Product,
 	ProductByHandleQuery,
@@ -14,7 +14,7 @@ import {
 	PRODUCTS_QUERY,
 	PRODUCT_BY_HANDLE_QUERY,
 	PRODUCT_BY_ID_QUERY,
-} from './queries/product';
+} from './graphql/queries/product';
 import {normalizeProduct} from './normalize/product';
 
 const cleanProducts = (

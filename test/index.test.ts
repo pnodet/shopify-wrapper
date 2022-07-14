@@ -11,5 +11,5 @@ describe('product', () => {
 			},
 		});
 		expect(result).toBeDefined();
-	})
-})
+	});
+});

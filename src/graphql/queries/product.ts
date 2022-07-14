@@ -1,6 +1,6 @@
 /* eslint-disable unicorn/template-indent, @typescript-eslint/naming-convention */
 import {gql} from 'graphql-tag';
-import {FullProduct} from '../graphql/fragments.js';
+import {FullProduct} from '../fragments.js';
 
 export const PRODUCT_BY_HANDLE_QUERY = gql`
 	query productByHandle($handle: String!) {

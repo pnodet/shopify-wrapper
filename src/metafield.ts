@@ -1,5 +1,5 @@
 import {Merge, RequireExactlyOne} from 'type-fest';
-import {shopifyFetch} from './fetch';
+import {shopifyFetch} from './http';
 import {
 	MetafieldByProductHandleQuery,
 	MetafieldByProductHandleQueryVariables,
@@ -10,7 +10,7 @@ import {normalizeMetafield} from './normalize/metafield';
 import {
 	METAFIELD_BY_PRODUCT_HANDLE_QUERY,
 	METAFIELD_BY_PRODUCT_ID_QUERY,
-} from './queries/metafield';
+} from './graphql/queries/metafield';
 import type {ShopifyFetchConfig, Storefront} from './types/index';
 
 const getMetafieldByProductHandle = async (

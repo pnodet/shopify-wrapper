@@ -1,6 +1,6 @@
 /* eslint-disable unicorn/template-indent, @typescript-eslint/naming-convention */
 import {gql} from 'graphql-tag';
-import {FullCollection, FullProduct} from '../graphql/fragments';
+import {FullCollection, FullProduct} from '../fragments';
 
 export const COLLECTION_BY_ID_QUERY = gql`
 	query collectionByID($id: ID!, $maxProductsPerCollection: Int!) {

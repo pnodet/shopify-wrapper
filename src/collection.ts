@@ -1,5 +1,5 @@
 import {Merge, RequireExactlyOne} from 'type-fest';
-import {shopifyFetch} from './fetch';
+import {shopifyFetch} from './http';
 import {
 	CollectionByHandleQuery,
 	CollectionByHandleQueryVariables,
@@ -10,7 +10,7 @@ import {normalizeCollection} from './normalize/collection';
 import {
 	COLLECTION_BY_HANDLE_QUERY,
 	COLLECTION_BY_ID_QUERY,
-} from './queries/collection';
+} from './graphql/queries/collection';
 import type {Storefront, ShopifyFetchConfig} from './types';
 
 export const getCollectionByHandle = async (

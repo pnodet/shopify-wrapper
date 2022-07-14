@@ -1,6 +1,6 @@
 /* eslint-disable unicorn/template-indent, @typescript-eslint/naming-convention */
 import {gql} from 'graphql-tag';
-import {FullMetafield} from '../graphql/fragments';
+import {FullMetafield} from '../fragments';
 
 export const METAFIELD_BY_PRODUCT_HANDLE_QUERY = gql`
 	query metafieldByProductHandle(

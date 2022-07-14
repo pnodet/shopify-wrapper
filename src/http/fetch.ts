@@ -1,6 +1,6 @@
 import {print, DocumentNode} from 'graphql';
 import fetch from 'cross-fetch';
-import type {ShopifyFetchConfig} from './types/index';
+import type {ShopifyFetchConfig} from '../types/index';
 
 export const shopifyFetch = async <ReturnValue, Variables>(
 	query: DocumentNode,

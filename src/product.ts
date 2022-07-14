@@ -1,6 +1,6 @@
 import {Merge, RequireExactlyOne} from 'type-fest';
-import {shopifyFetch} from './fetch';
-import {PRODUCT_BY_HANDLE_QUERY, PRODUCT_BY_ID_QUERY} from './queries/product';
+import {shopifyFetch} from './http';
+import {PRODUCT_BY_HANDLE_QUERY, PRODUCT_BY_ID_QUERY} from './graphql/queries/product';
 import {
 	ProductByHandleQuery,
 	ProductByHandleQueryVariables,

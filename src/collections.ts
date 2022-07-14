@@ -1,5 +1,5 @@
 import type {Merge, RequireExactlyOne} from 'type-fest';
-import {shopifyFetch} from './fetch';
+import {shopifyFetch} from './http';
 import {
 	Collection,
 	CollectionByHandleQuery,
@@ -13,7 +13,7 @@ import {
 	COLLECTIONS_QUERY,
 	COLLECTION_BY_HANDLE_QUERY,
 	COLLECTION_BY_ID_QUERY,
-} from './queries/collection';
+} from './graphql/queries/collection';
 import {normalizeCollection} from './normalize/collection';
 import type {Storefront, ShopifyFetchConfig} from './types/index';
 
