@@ -7,12 +7,18 @@ type FailResponse = {
 	errors: Array<{
 		message: string;
 		locations: any[];
+		path: any[];
+		extensions: any;
 	}>;
+	data: never;
 };
 
 type SuccessResponse<T> = {
+	errors: never;
 	data: T;
 };
+
+type Reponse<T> = FailResponse | SuccessResponse<T>;
 
 export const shopifyFetch = async <ReturnValue, Variables>(
 	query: DocumentNode,
@@ -41,13 +47,16 @@ export const shopifyFetch = async <ReturnValue, Variables>(
 	const response = await fetch(url, {method: 'POST', headers, body});
 	const {status} = response;
 
+	const parsed = (await response.json()) as Reponse<ReturnValue>;
+
 	if (status !== 200) {
-		const body = (await response.json()) as FailResponse;
-		const message = body.errors.map(({message}) => message).join(', ');
-		throw new FetchError(`${status}: ${message}`);
+		throw new FetchError(`${status}: ${parsed.errors}`);
 	}
 
-	const successResponse =
-		(await response.json()) as SuccessResponse<ReturnValue>;
-	return successResponse.data;
+	if (parsed.errors) {
+		const message = parsed.errors.map(({message}) => message).join(', ');
+		throw new FetchError(message);
+	}
+
+	return parsed.data;
 };
