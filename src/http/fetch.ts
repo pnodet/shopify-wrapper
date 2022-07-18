@@ -3,11 +3,15 @@ import fetch from 'cross-fetch';
 import {FetchError} from '../errors';
 import type {ShopifyFetchConfig} from '../types';
 
-type ResponseError = {
+type FailResponse = {
 	errors: Array<{
 		message: string;
 		locations: any[];
 	}>;
+};
+
+type SuccessResponse<T> = {
+	data: T;
 };
 
 export const shopifyFetch = async <ReturnValue, Variables>(
@@ -15,8 +19,6 @@ export const shopifyFetch = async <ReturnValue, Variables>(
 	variables: Variables,
 	{domain, token, isStorefront}: ShopifyFetchConfig,
 ): Promise<ReturnValue | undefined> => {
-	type ReponseValue = {data?: ReturnValue};
-
 	const url = isStorefront
 		? `https://${domain}/api/2022-07/graphql.json`
 		: `https://${domain}/admin/api/2022-07/graphql.json`;
@@ -40,14 +42,12 @@ export const shopifyFetch = async <ReturnValue, Variables>(
 	const {status} = response;
 
 	if (status !== 200) {
-		const body = (await response.json()) as ResponseError;
+		const body = (await response.json()) as FailResponse;
 		const message = body.errors.map(({message}) => message).join(', ');
 		throw new FetchError(`${status}: ${message}`);
 	}
 
-	const data = (await response.json()) as ReponseValue;
-	console.log('response', data);
-
-	const returnValue = data;
-	return returnValue?.data ?? undefined;
+	const successResponse =
+		(await response.json()) as SuccessResponse<ReturnValue>;
+	return successResponse.data;
 };
