@@ -1,4 +1,3 @@
-import type {Merge, RequireExactlyOne} from 'type-fest';
 import {shopifyFetch} from './http';
 import {
 	Product,
@@ -82,26 +81,35 @@ const getProducts = async (
 	);
 };
 
-type FindOptionalArgs = {
-	handles: string[];
+type IdVariant = {
 	ids: string[];
-	amount: number;
-};
-type FindMandatoryArgs = {
 	config: ShopifyFetchConfig;
+	handles?: never;
+	amount?: never;
 };
 
-type FindProductsArgs = Merge<
-	RequireExactlyOne<FindOptionalArgs>,
-	FindMandatoryArgs
->;
+type HandleVariant = {
+	handles: string[];
+	config: ShopifyFetchConfig;
+	ids?: never;
+	amount?: never;
+};
+
+type AmountVariant = {
+	amount: number;
+	config: ShopifyFetchConfig;
+	handles?: never;
+	ids?: never;
+};
+
+type FindManyProductsArgs = IdVariant | HandleVariant | AmountVariant;
 
 export const findMany = async ({
 	ids,
 	handles,
 	amount,
 	config,
-}: FindProductsArgs) => {
+}: FindManyProductsArgs) => {
 	if (handles) return getProductsByHandles(handles, config);
 	if (ids) return getProductsByIds(ids, config);
 	if (amount) return getProducts(amount, config);

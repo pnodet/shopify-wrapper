@@ -1,4 +1,3 @@
-import {Merge, RequireExactlyOne} from 'type-fest';
 import {shopifyFetch} from './http';
 import {
 	MetafieldByProductHandleQuery,
@@ -65,21 +64,23 @@ const getMetafieldByProductId = async (
 	return normalizeMetafield(response.product.metafield);
 };
 
-type FindOptionalArgs = {
+type HandleVariant = {
 	productHandle: string;
-	productId: string;
-};
-
-type FindMandatoryArgs = {
 	config: ShopifyFetchConfig;
 	namespace: string;
 	key: string;
+	productId?: never;
 };
 
-type FindCollectionArgs = Merge<
-	RequireExactlyOne<FindOptionalArgs>,
-	FindMandatoryArgs
->;
+type IdVariant = {
+	productId: string;
+	config: ShopifyFetchConfig;
+	namespace: string;
+	key: string;
+	productHandle?: never;
+};
+
+type FindMetafieldArgs = HandleVariant | IdVariant;
 
 export const find = async ({
 	productId,
@@ -87,7 +88,7 @@ export const find = async ({
 	config,
 	namespace,
 	key,
-}: FindCollectionArgs) => {
+}: FindMetafieldArgs) => {
 	if (productHandle) {
 		return getMetafieldByProductHandle(productHandle, config, namespace, key);
 	}

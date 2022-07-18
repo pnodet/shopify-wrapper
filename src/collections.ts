@@ -1,4 +1,3 @@
-import type {Merge, RequireExactlyOne} from 'type-fest';
 import {shopifyFetch} from './http';
 import {
 	Collection,
@@ -96,31 +95,50 @@ const getCollections = async (
 	);
 };
 
-type FindOptionalArgs = {
-	handles: string[];
+type IdVariant = {
 	ids: string[];
-	amount: number;
-};
-type FindMandatoryArgs = {
 	config: ShopifyFetchConfig;
 	maxProductsPerCollection?: number;
+	handles?: never;
+	amount?: never;
 };
 
-type FindCollectionArgs = Merge<
-	RequireExactlyOne<FindOptionalArgs>,
-	FindMandatoryArgs
->;
+type HandleVariant = {
+	handles: string[];
+	config: ShopifyFetchConfig;
+	maxProductsPerCollection?: number;
+	ids?: never;
+	amount?: never;
+};
+
+type AmountVariant = {
+	amount: number;
+	config: ShopifyFetchConfig;
+	maxProductsPerCollection?: number;
+	handles?: never;
+	ids?: never;
+};
+
+type FindManyCollectionArgs = HandleVariant | IdVariant | AmountVariant;
 
 export const findMany = async ({
-	ids,
 	handles,
-	amount,
+	ids,
 	config,
 	maxProductsPerCollection,
-}: FindCollectionArgs) => {
-	if (handles)
+	amount,
+}: FindManyCollectionArgs) => {
+	if (handles) {
 		return getCollectionsByHandles(handles, config, maxProductsPerCollection);
-	if (ids) return getCollectionsByIds(ids, config, maxProductsPerCollection);
-	if (amount) return getCollections(amount, config, maxProductsPerCollection);
+	}
+
+	if (ids) {
+		return getCollectionsByIds(ids, config, maxProductsPerCollection);
+	}
+
+	if (amount) {
+		return getCollections(amount, config, maxProductsPerCollection);
+	}
+
 	throw new Error('provide either ids or handles');
 };

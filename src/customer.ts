@@ -20,4 +20,11 @@ export const getCustomer = async (
 	return normalizeCustomer(response.customer);
 };
 
-export const find = {};
+type FindCustomerArgs = {
+	accessToken: string;
+	fetchConfig: ShopifyFetchConfig;
+};
+
+export const find = async ({accessToken, fetchConfig}: FindCustomerArgs) => {
+	return getCustomer(accessToken, fetchConfig);
+};

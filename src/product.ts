@@ -1,6 +1,8 @@
-import {Merge, RequireExactlyOne} from 'type-fest';
 import {shopifyFetch} from './http';
-import {PRODUCT_BY_HANDLE_QUERY, PRODUCT_BY_ID_QUERY} from './graphql/queries/product';
+import {
+	PRODUCT_BY_HANDLE_QUERY,
+	PRODUCT_BY_ID_QUERY,
+} from './graphql/queries/product';
 import {
 	ProductByHandleQuery,
 	ProductByHandleQueryVariables,
@@ -48,18 +50,21 @@ const getProductById = async (
 	return normalizeProduct(response.product);
 };
 
-type FindOptionalArgs = {
-	handle: string;
+type IdVariant = {
 	id: string;
+	config: ShopifyFetchConfig;
+	handle?: never;
 };
-type FindMandatoryArgs = {config: ShopifyFetchConfig};
 
-type FindCollectionArgs = Merge<
-	RequireExactlyOne<FindOptionalArgs>,
-	FindMandatoryArgs
->;
+type HandleVariant = {
+	handle: string;
+	config: ShopifyFetchConfig;
+	id?: never;
+};
 
-export const find = async ({id, handle, config}: FindCollectionArgs) => {
+type FindProductArgs = IdVariant | HandleVariant;
+
+export const find = async ({id, handle, config}: FindProductArgs) => {
 	if (handle) {
 		return getProductByHandle(handle, config);
 	}

@@ -1,4 +1,3 @@
-import {Merge, RequireExactlyOne} from 'type-fest';
 import {shopifyFetch} from './http';
 import {
 	CollectionByHandleQuery,
@@ -61,16 +60,19 @@ export const getCollectionById = async (
 	return normalizeCollection(response.collection);
 };
 
-type FindOptionalArgs = {
-	handle: string;
+type IdVariant = {
 	id: string;
+	config: ShopifyFetchConfig;
+	handle?: never;
 };
-type FindMandatoryArgs = {config: ShopifyFetchConfig};
 
-type FindCollectionArgs = Merge<
-	RequireExactlyOne<FindOptionalArgs>,
-	FindMandatoryArgs
->;
+type HandleVariant = {
+	handle: string;
+	config: ShopifyFetchConfig;
+	id?: never;
+};
+
+type FindCollectionArgs = IdVariant | HandleVariant;
 
 export const find = async ({id, handle, config}: FindCollectionArgs) => {
 	if (handle) {
