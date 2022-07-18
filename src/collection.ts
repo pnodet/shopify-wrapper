@@ -10,7 +10,8 @@ import {
 	COLLECTION_BY_HANDLE_QUERY,
 	COLLECTION_BY_ID_QUERY,
 } from './graphql/queries/collection';
-import type {Storefront, ShopifyFetchConfig} from './types';
+import {Storefront, configParser, ShopifyFetchConfig} from './types';
+import {ValidationError} from './errors/validation';
 
 export const getCollectionByHandle = async (
 	handle: string,
@@ -75,6 +76,8 @@ type HandleVariant = {
 type FindCollectionArgs = IdVariant | HandleVariant;
 
 export const find = async ({id, handle, config}: FindCollectionArgs) => {
+	configParser.parse(config);
+
 	if (handle) {
 		return getCollectionByHandle(handle, config);
 	}
@@ -83,5 +86,5 @@ export const find = async ({id, handle, config}: FindCollectionArgs) => {
 		return getCollectionById(id, config);
 	}
 
-	throw new Error('provide either id or handle');
+	throw new ValidationError('provide either id or handle');
 };

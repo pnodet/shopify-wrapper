@@ -8,13 +8,14 @@ import {
 	ProductsQuery,
 	ProductsQueryVariables,
 } from './graphql/schema';
-import type {Storefront, ShopifyFetchConfig} from './types/index';
+import {Storefront, configParser, ShopifyFetchConfig} from './types/index';
 import {
 	PRODUCTS_QUERY,
 	PRODUCT_BY_HANDLE_QUERY,
 	PRODUCT_BY_ID_QUERY,
 } from './graphql/queries/product';
 import {normalizeProduct} from './normalize/product';
+import {ValidationError} from './errors/validation';
 
 const cleanProducts = (
 	responses: Array<ProductByIdQuery | ProductByHandleQuery | undefined>,
@@ -110,8 +111,10 @@ export const findMany = async ({
 	amount,
 	config,
 }: FindManyProductsArgs) => {
+	configParser.parse(config);
+
 	if (handles) return getProductsByHandles(handles, config);
 	if (ids) return getProductsByIds(ids, config);
 	if (amount) return getProducts(amount, config);
-	throw new Error('provide either ids or handles');
+	throw new ValidationError('provide either ids or handles');
 };

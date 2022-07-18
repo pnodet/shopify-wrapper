@@ -9,8 +9,9 @@ import {
 	ProductByIdQuery,
 	ProductByIdQueryVariables,
 } from './graphql/schema';
-import type {Storefront, ShopifyFetchConfig} from './types/index';
+import {Storefront, configParser, ShopifyFetchConfig} from './types/index';
 import {normalizeProduct} from './normalize/product';
+import {ValidationError} from './errors/validation';
 
 const getProductByHandle = async (
 	handle: string,
@@ -65,6 +66,8 @@ type HandleVariant = {
 type FindProductArgs = IdVariant | HandleVariant;
 
 export const find = async ({id, handle, config}: FindProductArgs) => {
+	configParser.parse(config);
+
 	if (handle) {
 		return getProductByHandle(handle, config);
 	}
@@ -73,5 +76,5 @@ export const find = async ({id, handle, config}: FindProductArgs) => {
 		return getProductById(id, config);
 	}
 
-	throw new Error('provide either id or handle');
+	throw new ValidationError('provide either id or handle');
 };

@@ -1,6 +1,6 @@
 import {shopifyFetch} from './http';
 import {CustomerQuery, CustomerQueryVariables} from './graphql/schema';
-import type {Storefront, ShopifyFetchConfig} from './types/index';
+import {Storefront, configParser, ShopifyFetchConfig} from './types/index';
 import {normalizeCustomer} from './normalize/customer';
 import {CUSTOMER_QUERY} from './graphql/queries/customer';
 
@@ -22,9 +22,10 @@ export const getCustomer = async (
 
 type FindCustomerArgs = {
 	accessToken: string;
-	fetchConfig: ShopifyFetchConfig;
+	config: ShopifyFetchConfig;
 };
 
-export const find = async ({accessToken, fetchConfig}: FindCustomerArgs) => {
-	return getCustomer(accessToken, fetchConfig);
+export const find = async ({accessToken, config}: FindCustomerArgs) => {
+	configParser.parse(config);
+	return getCustomer(accessToken, config);
 };

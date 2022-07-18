@@ -14,7 +14,8 @@ import {
 	COLLECTION_BY_ID_QUERY,
 } from './graphql/queries/collection';
 import {normalizeCollection} from './normalize/collection';
-import type {Storefront, ShopifyFetchConfig} from './types/index';
+import {Storefront, configParser, ShopifyFetchConfig} from './types/index';
+import {ValidationError} from './errors/validation';
 
 const cleanCollections = (
 	responses: Array<CollectionByIdQuery | CollectionByHandleQuery | undefined>,
@@ -128,6 +129,8 @@ export const findMany = async ({
 	maxProductsPerCollection,
 	amount,
 }: FindManyCollectionArgs) => {
+	configParser.parse(config);
+
 	if (handles) {
 		return getCollectionsByHandles(handles, config, maxProductsPerCollection);
 	}
@@ -140,5 +143,5 @@ export const findMany = async ({
 		return getCollections(amount, config, maxProductsPerCollection);
 	}
 
-	throw new Error('provide either ids or handles');
+	throw new ValidationError('provide either ids or handles');
 };

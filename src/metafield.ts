@@ -10,7 +10,8 @@ import {
 	METAFIELD_BY_PRODUCT_HANDLE_QUERY,
 	METAFIELD_BY_PRODUCT_ID_QUERY,
 } from './graphql/queries/metafield';
-import type {ShopifyFetchConfig, Storefront} from './types/index';
+import {configParser, ShopifyFetchConfig, Storefront} from './types/index';
+import {ValidationError} from './errors/validation';
 
 const getMetafieldByProductHandle = async (
 	handle: string,
@@ -89,6 +90,8 @@ export const find = async ({
 	namespace,
 	key,
 }: FindMetafieldArgs) => {
+	configParser.parse(config);
+
 	if (productHandle) {
 		return getMetafieldByProductHandle(productHandle, config, namespace, key);
 	}
@@ -97,5 +100,5 @@ export const find = async ({
 		return getMetafieldByProductId(productId, config, namespace, key);
 	}
 
-	throw new Error('provide either productId or productHandle');
+	throw new ValidationError('provide either productId or productHandle');
 };
