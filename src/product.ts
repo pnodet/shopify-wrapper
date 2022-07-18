@@ -67,14 +67,18 @@ export const find = async ({id, handle, config}: FindProductArgs) => {
 	configParser.parse(config);
 
 	if (handle) {
+		if (id)
+			throw new ValidationError('Provide either id or handle');
 		handleParser.parse(handle);
 		return getProductByHandle(handle, config);
 	}
 
 	if (id) {
+		if (handle)
+			throw new ValidationError('Provide either id or handle');
 		idParser.parse(id);
 		return getProductById(id, config);
 	}
 
-	throw new ValidationError('provide either id or handle');
+	throw new ValidationError('Provide either id or handle');
 };

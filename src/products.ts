@@ -120,19 +120,25 @@ export const findMany = async ({
 	configParser.parse(config);
 
 	if (handles) {
+		if (ids || amount)
+			throw new ValidationError('Provide either ids, handles or amount');
 		handlesParser.parse(handles);
 		return getProductsByHandles(handles, config);
 	}
 
 	if (ids) {
+		if (handles || amount)
+			throw new ValidationError('Provide either ids, handles or amount');
 		idsParser.parse(ids);
 		return getProductsByIds(ids, config);
 	}
 
 	if (amount) {
+		if (handles || ids)
+			throw new ValidationError('Provide either ids, handles or amount');
 		amountParser.parse(amount);
 		return getProducts(amount, config);
 	}
 
-	throw new ValidationError('provide either ids or handles');
+	throw new ValidationError('Provide either ids, handles or amount');
 };

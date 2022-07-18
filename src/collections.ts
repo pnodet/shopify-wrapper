@@ -137,20 +137,26 @@ export const findMany = async ({
 }: FindManyCollectionArgs) => {
 	configParser.parse(config);
 
-	if (handles) {
+	if (handles !== undefined) {
+		if (ids || amount)
+			throw new ValidationError('Provide either ids, handles or amount');
 		handlesParser.parse(handles);
 		return getCollectionsByHandles(handles, config, productsAmount);
 	}
 
-	if (ids) {
+	if (ids !== undefined) {
+		if (handles || amount)
+			throw new ValidationError('Provide either ids, handles or amount');
 		idsParser.parse(ids);
 		return getCollectionsByIds(ids, config, productsAmount);
 	}
 
-	if (amount) {
+	if (amount !== undefined) {
+		if (handles || ids)
+			throw new ValidationError('Provide either ids, handles or amount');
 		amountParser.parse(amount);
 		return getCollections(amount, config, productsAmount);
 	}
 
-	throw new ValidationError('provide either ids or handles');
+	throw new ValidationError('Provide either ids, handles or amount');
 };

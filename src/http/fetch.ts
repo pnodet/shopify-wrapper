@@ -50,7 +50,7 @@ export const shopifyFetch = async <ReturnValue, Variables>(
 	const parsed = (await response.json()) as Reponse<ReturnValue>;
 
 	if (status !== 200) {
-		throw new FetchError(`${status}: ${parsed.errors}`);
+		throw new FetchError(`${status}: ${parsed.errors as unknown as string}`);
 	}
 
 	if (parsed.errors) {

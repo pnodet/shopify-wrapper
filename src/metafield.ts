@@ -94,14 +94,18 @@ export const find = async ({
 	configParser.parse(config);
 
 	if (productHandle) {
+		if (productId)
+			throw new ValidationError('Provide either productId or productHandle');
 		handleParser.parse(productHandle);
 		return getMetafieldByProductHandle(productHandle, config, namespace, key);
 	}
 
 	if (productId) {
+		if (productHandle)
+			throw new ValidationError('Provide either productId or productHandle');
 		idParser.parse(productId);
 		return getMetafieldByProductId(productId, config, namespace, key);
 	}
 
-	throw new ValidationError('provide either productId or productHandle');
+	throw new ValidationError('Provide either productId or productHandle');
 };

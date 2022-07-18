@@ -79,15 +79,17 @@ type FindCollectionArgs = IdVariant | HandleVariant;
 export const find = async ({id, handle, config}: FindCollectionArgs) => {
 	configParser.parse(config);
 
-	if (handle) {
+	if (handle !== undefined) {
+		if (id) throw new ValidationError('Provide either id or handle');
 		handleParser.parse(handle);
 		return getCollectionByHandle(handle, config);
 	}
 
-	if (id) {
+	if (id !== undefined) {
+		if (handle) throw new ValidationError('Provide either id or handle');
 		idParser.parse(id);
 		return getCollectionById(id, config);
 	}
 
-	throw new ValidationError('provide either id or handle');
+	throw new ValidationError('Provide either id or handle');
 };
