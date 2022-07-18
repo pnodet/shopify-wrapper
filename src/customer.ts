@@ -1,8 +1,9 @@
 import {shopifyFetch} from './http';
 import {CustomerQuery, CustomerQueryVariables} from './graphql/schema';
-import {Storefront, configParser, ShopifyFetchConfig} from './types/index';
-import {normalizeCustomer} from './normalize/customer';
-import {CUSTOMER_QUERY} from './graphql/queries/customer';
+import type {Storefront, ShopifyFetchConfig} from './types';
+import {configParser} from './validation';
+import {normalizeCustomer} from './normalize';
+import {CUSTOMER_QUERY} from './graphql/queries';
 
 export const getCustomer = async (
 	accessToken: string,

@@ -5,18 +5,19 @@ import {
 	CollectionByIdQuery,
 	CollectionByIdQueryVariables,
 } from './graphql/schema';
-import {normalizeCollection} from './normalize/collection';
+import {normalizeCollection} from './normalize';
 import {
 	COLLECTION_BY_HANDLE_QUERY,
 	COLLECTION_BY_ID_QUERY,
-} from './graphql/queries/collection';
-import {Storefront, configParser, ShopifyFetchConfig} from './types';
-import {ValidationError} from './errors/validation';
+} from './graphql/queries';
+import type {Storefront, ShopifyFetchConfig} from './types';
+import {ValidationError} from './errors';
+import {configParser, handleParser, idParser} from './validation';
 
 export const getCollectionByHandle = async (
 	handle: string,
 	fetchConfig: ShopifyFetchConfig,
-	maxProductsPerCollection = 10,
+	productsAmount = 10,
 ): Promise<Storefront.Collection | undefined> => {
 	const response = await shopifyFetch<
 		CollectionByHandleQuery,
@@ -25,7 +26,7 @@ export const getCollectionByHandle = async (
 		COLLECTION_BY_HANDLE_QUERY,
 		{
 			handle,
-			maxProductsPerCollection,
+			productsAmount,
 		},
 		fetchConfig,
 	);
@@ -40,7 +41,7 @@ export const getCollectionByHandle = async (
 export const getCollectionById = async (
 	id: string,
 	fetchConfig: ShopifyFetchConfig,
-	maxProductsPerCollection = 10,
+	productsAmount = 10,
 ): Promise<Storefront.Collection | undefined> => {
 	const response = await shopifyFetch<
 		CollectionByIdQuery,
@@ -49,7 +50,7 @@ export const getCollectionById = async (
 		COLLECTION_BY_ID_QUERY,
 		{
 			id,
-			maxProductsPerCollection,
+			productsAmount,
 		},
 		fetchConfig,
 	);
@@ -79,10 +80,12 @@ export const find = async ({id, handle, config}: FindCollectionArgs) => {
 	configParser.parse(config);
 
 	if (handle) {
+		handleParser.parse(handle);
 		return getCollectionByHandle(handle, config);
 	}
 
 	if (id) {
+		idParser.parse(id);
 		return getCollectionById(id, config);
 	}
 

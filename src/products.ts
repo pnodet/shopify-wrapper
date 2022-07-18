@@ -8,14 +8,20 @@ import {
 	ProductsQuery,
 	ProductsQueryVariables,
 } from './graphql/schema';
-import {Storefront, configParser, ShopifyFetchConfig} from './types/index';
+import type {Storefront, ShopifyFetchConfig} from './types';
+import {
+	amountParser,
+	configParser,
+	handlesParser,
+	idsParser,
+} from './validation';
 import {
 	PRODUCTS_QUERY,
 	PRODUCT_BY_HANDLE_QUERY,
 	PRODUCT_BY_ID_QUERY,
-} from './graphql/queries/product';
-import {normalizeProduct} from './normalize/product';
-import {ValidationError} from './errors/validation';
+} from './graphql/queries';
+import {normalizeProduct} from './normalize';
+import {ValidationError} from './errors';
 
 const cleanProducts = (
 	responses: Array<ProductByIdQuery | ProductByHandleQuery | undefined>,
@@ -113,8 +119,20 @@ export const findMany = async ({
 }: FindManyProductsArgs) => {
 	configParser.parse(config);
 
-	if (handles) return getProductsByHandles(handles, config);
-	if (ids) return getProductsByIds(ids, config);
-	if (amount) return getProducts(amount, config);
+	if (handles) {
+		handlesParser.parse(handles);
+		return getProductsByHandles(handles, config);
+	}
+
+	if (ids) {
+		idsParser.parse(ids);
+		return getProductsByIds(ids, config);
+	}
+
+	if (amount) {
+		amountParser.parse(amount);
+		return getProducts(amount, config);
+	}
+
 	throw new ValidationError('provide either ids or handles');
 };

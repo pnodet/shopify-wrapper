@@ -4,14 +4,15 @@ import {
 	MetafieldByProductHandleQueryVariables,
 	MetafieldByProductIdQuery,
 	MetafieldByProductIdQueryVariables,
-} from './graphql/schema.js';
-import {normalizeMetafield} from './normalize/metafield';
+} from './graphql/schema';
+import {normalizeMetafield} from './normalize';
 import {
 	METAFIELD_BY_PRODUCT_HANDLE_QUERY,
 	METAFIELD_BY_PRODUCT_ID_QUERY,
-} from './graphql/queries/metafield';
-import {configParser, ShopifyFetchConfig, Storefront} from './types/index';
-import {ValidationError} from './errors/validation';
+} from './graphql/queries';
+import type {ShopifyFetchConfig, Storefront} from './types';
+import {configParser, handleParser, idParser} from './validation';
+import {ValidationError} from './errors';
 
 const getMetafieldByProductHandle = async (
 	handle: string,
@@ -93,10 +94,12 @@ export const find = async ({
 	configParser.parse(config);
 
 	if (productHandle) {
+		handleParser.parse(productHandle);
 		return getMetafieldByProductHandle(productHandle, config, namespace, key);
 	}
 
 	if (productId) {
+		idParser.parse(productId);
 		return getMetafieldByProductId(productId, config, namespace, key);
 	}
 

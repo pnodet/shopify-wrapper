@@ -1,7 +1,7 @@
 import {print, DocumentNode} from 'graphql';
 import fetch from 'cross-fetch';
-import {FetchError} from 'src/errors/fetch';
-import type {ShopifyFetchConfig} from '../types/index';
+import {FetchError} from '../errors';
+import type {ShopifyFetchConfig} from '../types';
 
 type ResponseError = {
 	errors: Array<{

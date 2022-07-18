@@ -3,10 +3,10 @@ import {gql} from 'graphql-tag';
 import {FullCollection, FullProduct} from '../fragments';
 
 export const COLLECTION_BY_ID_QUERY = gql`
-	query collectionByID($id: ID!, $maxProductsPerCollection: Int!) {
+	query collectionByID($id: ID!, $productsAmount: Int!) {
 		collection(id: $id) {
 			...FullCollection
-			products(first: $maxProductsPerCollection) {
+			products(first: $productsAmount) {
 				edges {
 					node {
 						...FullProduct
@@ -20,10 +20,10 @@ export const COLLECTION_BY_ID_QUERY = gql`
 `;
 
 export const COLLECTION_BY_HANDLE_QUERY = gql`
-	query collectionByHandle($handle: String!, $maxProductsPerCollection: Int!) {
+	query collectionByHandle($handle: String!, $productsAmount: Int!) {
 		collection(handle: $handle) {
 			...FullCollection
-			products(first: $maxProductsPerCollection) {
+			products(first: $productsAmount) {
 				edges {
 					node {
 						...FullProduct
@@ -37,7 +37,7 @@ export const COLLECTION_BY_HANDLE_QUERY = gql`
 `;
 
 export const COLLECTIONS_QUERY = gql`
-	query collections($first: Int!, $maxProductsPerCollection: Int!) {
+	query collections($first: Int!, $productsAmount: Int!) {
 		collections(first: $first) {
 			pageInfo {
 				hasNextPage
@@ -47,7 +47,7 @@ export const COLLECTIONS_QUERY = gql`
 				cursor
 				node {
 					...FullCollection
-					products(first: $maxProductsPerCollection) {
+					products(first: $productsAmount) {
 						edges {
 							node {
 								...FullProduct

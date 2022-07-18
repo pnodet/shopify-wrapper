@@ -12,10 +12,16 @@ import {
 	COLLECTIONS_QUERY,
 	COLLECTION_BY_HANDLE_QUERY,
 	COLLECTION_BY_ID_QUERY,
-} from './graphql/queries/collection';
-import {normalizeCollection} from './normalize/collection';
-import {Storefront, configParser, ShopifyFetchConfig} from './types/index';
-import {ValidationError} from './errors/validation';
+} from './graphql/queries';
+import {normalizeCollection} from './normalize';
+import type {Storefront, ShopifyFetchConfig} from './types';
+import {ValidationError} from './errors';
+import {
+	amountParser,
+	configParser,
+	handlesParser,
+	idsParser,
+} from './validation';
 
 const cleanCollections = (
 	responses: Array<CollectionByIdQuery | CollectionByHandleQuery | undefined>,
@@ -35,7 +41,7 @@ const cleanCollections = (
 const getCollectionsByIds = async (
 	ids: string[],
 	fetchConfig: ShopifyFetchConfig,
-	maxProductsPerCollection = 10,
+	productsAmount = 10,
 ): Promise<Storefront.Collection[] | undefined> =>
 	cleanCollections(
 		await Promise.all(
@@ -44,7 +50,7 @@ const getCollectionsByIds = async (
 					COLLECTION_BY_ID_QUERY,
 					{
 						id,
-						maxProductsPerCollection,
+						productsAmount,
 					},
 					fetchConfig,
 				),
@@ -55,7 +61,7 @@ const getCollectionsByIds = async (
 const getCollectionsByHandles = async (
 	handles: string[],
 	fetchConfig: ShopifyFetchConfig,
-	maxProductsPerCollection = 10,
+	productsAmount = 10,
 ): Promise<Storefront.Collection[] | undefined> =>
 	cleanCollections(
 		await Promise.all(
@@ -64,7 +70,7 @@ const getCollectionsByHandles = async (
 					COLLECTION_BY_HANDLE_QUERY,
 					{
 						handle,
-						maxProductsPerCollection,
+						productsAmount,
 					},
 					fetchConfig,
 				),
@@ -75,7 +81,7 @@ const getCollectionsByHandles = async (
 const getCollections = async (
 	amount: number,
 	fetchConfig: ShopifyFetchConfig,
-	maxProductsPerCollection = 10,
+	productsAmount = 10,
 ): Promise<Storefront.Collection[] | undefined> => {
 	const response = await shopifyFetch<
 		CollectionsQuery,
@@ -84,7 +90,7 @@ const getCollections = async (
 		COLLECTIONS_QUERY,
 		{
 			first: amount,
-			maxProductsPerCollection,
+			productsAmount,
 		},
 		fetchConfig,
 	);
@@ -99,7 +105,7 @@ const getCollections = async (
 type IdVariant = {
 	ids: string[];
 	config: ShopifyFetchConfig;
-	maxProductsPerCollection?: number;
+	productsAmount?: number;
 	handles?: never;
 	amount?: never;
 };
@@ -107,7 +113,7 @@ type IdVariant = {
 type HandleVariant = {
 	handles: string[];
 	config: ShopifyFetchConfig;
-	maxProductsPerCollection?: number;
+	productsAmount?: number;
 	ids?: never;
 	amount?: never;
 };
@@ -115,7 +121,7 @@ type HandleVariant = {
 type AmountVariant = {
 	amount: number;
 	config: ShopifyFetchConfig;
-	maxProductsPerCollection?: number;
+	productsAmount?: number;
 	handles?: never;
 	ids?: never;
 };
@@ -126,21 +132,24 @@ export const findMany = async ({
 	handles,
 	ids,
 	config,
-	maxProductsPerCollection,
+	productsAmount,
 	amount,
 }: FindManyCollectionArgs) => {
 	configParser.parse(config);
 
 	if (handles) {
-		return getCollectionsByHandles(handles, config, maxProductsPerCollection);
+		handlesParser.parse(handles);
+		return getCollectionsByHandles(handles, config, productsAmount);
 	}
 
 	if (ids) {
-		return getCollectionsByIds(ids, config, maxProductsPerCollection);
+		idsParser.parse(ids);
+		return getCollectionsByIds(ids, config, productsAmount);
 	}
 
 	if (amount) {
-		return getCollections(amount, config, maxProductsPerCollection);
+		amountParser.parse(amount);
+		return getCollections(amount, config, productsAmount);
 	}
 
 	throw new ValidationError('provide either ids or handles');

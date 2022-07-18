@@ -9767,7 +9767,7 @@ export type CartByIdQuery = {
 
 export type CollectionByIdQueryVariables = Exact<{
 	id: Scalars['ID'];
-	maxProductsPerCollection: Scalars['Int'];
+	productsAmount: Scalars['Int'];
 }>;
 
 export type CollectionByIdQuery = {
@@ -9902,7 +9902,7 @@ export type CollectionByIdQuery = {
 
 export type CollectionByHandleQueryVariables = Exact<{
 	handle: Scalars['String'];
-	maxProductsPerCollection: Scalars['Int'];
+	productsAmount: Scalars['Int'];
 }>;
 
 export type CollectionByHandleQuery = {
@@ -10037,7 +10037,7 @@ export type CollectionByHandleQuery = {
 
 export type CollectionsQueryVariables = Exact<{
 	first: Scalars['Int'];
-	maxProductsPerCollection: Scalars['Int'];
+	productsAmount: Scalars['Int'];
 }>;
 
 export type CollectionsQuery = {
